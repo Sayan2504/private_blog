@@ -28,11 +28,9 @@ test:
   database: private_blog_test
 
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
-production:
   primary: &primary_production
     <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
     database: private_blog_production
     username: private_blog
     password: <%= ENV["PRIVATE_BLOG_DATABASE_PASSWORD"] %>

@@ -168,7 +168,8 @@ trix-toolbar .trix-input--dialog {
   box-shadow: none;
   outline: none;
   -webkit-appearance: none;
-  -moz-appearance: none; }
+  -moz-appearance: none;
+  appearance: none; }
   trix-toolbar .trix-input--dialog.validate:invalid {
     box-shadow: #F00 0px 0px 1.5px 1px; }
 
@@ -250,7 +251,8 @@ trix-editor .attachment__caption-editor {
   border: none;
   outline: none;
   -webkit-appearance: none;
-  -moz-appearance: none; }
+  -moz-appearance: none;
+  appearance: none; }
 
 trix-editor .attachment__toolbar {
   position: absolute;
