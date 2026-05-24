@@ -1,0 +1,9 @@
+<div id="<%= dom_id post %>">
+  <h2 class="text-xl font-bold text-gray-900"><%= post.title %></h2>
+  <% if post.subtitle.present? %>
+    <p class="text-gray-500 mt-1"><%= post.subtitle %></p>
+  <% end %>
+  <div class="prose mt-4">
+    <%= post.content %>
+  </div>
+</div>

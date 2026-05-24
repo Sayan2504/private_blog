@@ -1,0 +1,17 @@
+<% content_for :title, @post.title %>
+
+<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <%= render PostHeaderComponent.new(post: @post) %>
+
+  <!-- Article Content -->
+  <div class="prose prose-lg prose-gray max-w-none">
+    <%= @post.content %>
+  </div>
+
+  <!-- Back Link -->
+  <div class="mt-12 pt-8 border-t border-gray-100">
+    <%= render ButtonComponent.new(variant: :ghost, size: :md, href: root_path, icon: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>') do %>
+      Back to all stories
+    <% end %>
+  </div>
+</article>

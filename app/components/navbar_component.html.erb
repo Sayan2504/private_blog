@@ -1,0 +1,23 @@
+<header class="border-b border-gray-200 bg-white sticky top-0 z-50">
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo -->
+      <div class="flex items-center">
+        <%= link_to root_path, class: "flex items-center space-x-2" do %>
+          <svg class="w-8 h-8 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          <span class="text-xl font-bold tracking-tight text-gray-900">The Blog</span>
+        <% end %>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex items-center space-x-4">
+        <%= link_to "Home", root_path, class: "text-sm text-gray-600 hover:text-gray-900 transition-colors" %>
+        <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path, icon: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>') do %>
+          Write
+        <% end %>
+      </div>
+    </div>
+  </nav>
+</header>
