@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html>
   <head>
     <title><%= content_for(:title) || "The Blog" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -19,7 +19,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="h-full bg-white text-gray-900 antialiased">
+  <body class="min-h-screen flex flex-col bg-white text-gray-900 antialiased">
     <%= render NavbarComponent.new(current_path: request.path) %>
 
     <% if notice.present? %>
@@ -29,7 +29,7 @@
       <%= render FlashComponent.new(type: :alert, message: alert) %>
     <% end %>
 
-    <main>
+    <main class="flex-1 pb-16">
       <%= yield %>
     </main>
 

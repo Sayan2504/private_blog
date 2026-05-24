@@ -6,7 +6,11 @@
         <%= render AvatarComponent.new(name: post.author, size: :sm) %>
         <span class="font-medium text-gray-700"><%= post.author.presence || "Anonymous" %></span>
         <span class="text-gray-300">&middot;</span>
-        <time class="text-gray-500"><%= post.published_at&.strftime("%b %-d, %Y") %></time>
+        <% if post.published? %>
+          <time class="text-gray-500"><%= post.published_at.strftime("%b %-d, %Y") %></time>
+        <% else %>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Draft</span>
+        <% end %>
       </div>
 
       <!-- Title & Subtitle -->

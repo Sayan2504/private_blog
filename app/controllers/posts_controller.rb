@@ -2,7 +2,11 @@ class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
 
   def index
-    @posts = Post.published
+    @tab = params[:tab]&.to_s == "drafts" ? "drafts" : "published"
+    @posts = @tab == "drafts" ? Post.drafts : Post.published
+    @recent_posts = Post.published.limit(5)
+    @drafts_count = Post.drafts.count
+    @published_count = Post.published.count
   end
 
   def show
