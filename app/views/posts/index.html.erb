@@ -2,17 +2,10 @@
 
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-  <!-- Stats strip -->
-  <div class="flex items-center space-x-4 mb-6 text-sm text-gray-500">
-    <span><span class="font-semibold text-gray-900"><%= @published_count %></span> published</span>
-    <span class="text-gray-200">&bull;</span>
-    <span><span class="font-semibold text-gray-900"><%= @drafts_count %></span> drafts</span>
-  </div>
-
   <!-- Tabs -->
   <%= render TabsComponent.new(tabs: [
-    TabsComponent::Tab.new(label: "Published", href: posts_path(tab: "published"), active: @tab == "published"),
-    TabsComponent::Tab.new(label: "Drafts", href: posts_path(tab: "drafts"), active: @tab == "drafts")
+    TabsComponent::Tab.new(label: "Published (#{@published_count})", href: posts_path(tab: "published"), active: @tab == "published"),
+    TabsComponent::Tab.new(label: "Drafts (#{@drafts_count})", href: posts_path(tab: "drafts"), active: @tab == "drafts")
   ]) %>
 
   <% if @posts.any? %>
@@ -38,5 +31,4 @@
       <% end %>
     </div>
   <% end %>
-
 </div>
