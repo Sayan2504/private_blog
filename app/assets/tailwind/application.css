@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
 /* Typography styles for blog content */
 @layer base {
   .prose {
@@ -161,16 +159,54 @@
 
   .dark trix-toolbar {
     border-bottom-color: #374151;
+    background-color: transparent;
   }
 
   .dark trix-editor {
     color: #e5e7eb;
+    background-color: transparent;
+  }
+
+  /* Trix toolbar button styles for dark mode */
+  .dark trix-toolbar .trix-button-group {
+    border-color: #374151;
+  }
+
+  .dark trix-toolbar .trix-button {
+    color: #9ca3af;
+    background-color: transparent;
+    border-color: #374151;
+  }
+
+  .dark trix-toolbar .trix-button:hover {
+    color: #e5e7eb;
+    background-color: #374151;
+  }
+
+  .dark trix-toolbar .trix-button.trix-active {
+    background-color: #1f2937;
+    color: #60a5fa;
+  }
+
+  /* Invert the SVG background-image icons to white in dark mode */
+  .dark trix-toolbar .trix-button--icon::before {
+    filter: invert(1);
+  }
+
+  /* Trix toolbar input styling */
+  .dark trix-toolbar input[type="text"],
+  .dark trix-toolbar input[type="url"],
+  .dark trix-toolbar input[type="search"] {
+    background-color: #1f2937;
+    color: #e5e7eb;
+    border-color: #374151;
   }
 
   /* Line clamp utility */
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }

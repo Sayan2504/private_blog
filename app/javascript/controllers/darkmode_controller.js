@@ -23,7 +23,7 @@ export default class extends Controller {
   updateIcon() {
     const isDark = document.documentElement.classList.contains("dark")
     if (this.hasIconTarget) {
-      this.iconTarget.innerHTML = isDark ? this.moonIcon : this.sunIcon
+      this.iconTarget.innerHTML = isDark ? this.sunIcon : this.moonIcon
     }
   }
 
