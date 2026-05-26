@@ -2,11 +2,11 @@
 
 class ButtonComponent < ViewComponent::Base
   VARIANTS = {
-    primary: "bg-gray-900 text-white hover:bg-gray-700 border border-gray-900",
-    secondary: "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300",
-    success: "bg-green-600 text-white hover:bg-green-700 border border-green-600",
-    danger: "bg-red-600 text-white hover:bg-red-700 border border-red-600",
-    ghost: "bg-transparent text-gray-500 hover:text-gray-700 border-0"
+    primary: "bg-gray-900 text-white hover:bg-gray-700 border border-gray-900 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300 dark:border-gray-100",
+    secondary: "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 dark:border-gray-600",
+    success: "bg-green-600 text-white hover:bg-green-700 border border-green-600 dark:bg-green-500 dark:hover:bg-green-600 dark:border-green-500",
+    danger: "bg-red-600 text-white hover:bg-red-700 border border-red-600 dark:bg-red-500 dark:hover:bg-red-600 dark:border-red-500",
+    ghost: "bg-transparent text-gray-500 hover:text-gray-700 border-0 dark:text-gray-400 dark:hover:text-gray-200"
   }.freeze
 
   SIZES = {
