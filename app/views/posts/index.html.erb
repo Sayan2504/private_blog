@@ -1,34 +1,75 @@
 <% content_for :title, "MindCanvas — Stories & Ideas" %>
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+  <section class="rounded-3xl border border-gray-200 dark:border-gray-700 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-950 dark:via-gray-900 dark:to-black p-6 sm:p-8 lg:p-10 shadow-sm">
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl space-y-4">
+        <h1 class="text-4xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">Fresh ideas, published for readers.</h1>
+      </div>
 
-  <!-- Tabs -->
-  <%= render TabsComponent.new(tabs: [
-    TabsComponent::Tab.new(label: "Published (#{@published_count})", href: posts_path(tab: "published"), active: @tab == "published"),
-    TabsComponent::Tab.new(label: "Drafts (#{@drafts_count})", href: posts_path(tab: "drafts"), active: @tab == "drafts")
-  ]) %>
-
-  <% if @posts.any? %>
-    <div class="divide-y divide-gray-100 dark:divide-gray-800">
-      <% @posts.each do |post| %>
-        <%= render PostCardComponent.new(post: post) %>
-      <% end %>
+      <div class="flex flex-wrap items-center gap-3">
+        <% if user_signed_in? %>
+          <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
+            Write a story
+          <% end %>
+        <% else %>
+          <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_user_registration_path) do %>
+            Start writing
+          <% end %>
+        <% end %>
+      </div>
     </div>
-  <% else %>
-    <div class="text-center py-16">
-      <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
-      </svg>
-      <% if @tab == "drafts" %>
-        <h3 class="text-base font-medium text-gray-900 dark:text-gray-100 mb-1">No drafts</h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Posts saved without publishing will appear here.</p>
-      <% else %>
+
+    <div class="mt-8 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 p-5 shadow-sm">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Stories published</p>
+      <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @published_count %></p>
+      <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Only the latest published posts are shown on the home feed.</p>
+    </div>
+  </section>
+
+  <% if user_signed_in? && @draft_posts.any? %>
+    <section class="mt-10 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 shadow-sm">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Your drafts</p>
+          <h2 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Saved ideas, ready when you are.</h2>
+        </div>
+      </div>
+
+      <div class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <% @draft_posts.each do |post| %>
+          <%= render PostCardComponent.new(post: post) %>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+
+  <section class="mt-10">
+    <div class="flex flex-col gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Latest posts <%= @published_count %></p>
+        <h2 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">What’s live right now</h2>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Only published stories appear on this page.</p>
+    </div>
+
+    <% if @posts.any? %>
+      <div class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <% @posts.each do |post| %>
+          <%= render PostCardComponent.new(post: post) %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="mt-8 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-gray-900/70 py-16 text-center shadow-sm">
+        <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+        </svg>
         <h3 class="text-base font-medium text-gray-900 dark:text-gray-100 mb-1">No stories yet</h3>
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Get started by writing your first post.</p>
-      <% end %>
-      <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
-        Write your first story
-      <% end %>
-    </div>
-  <% end %>
+        <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
+          Write your first story
+        <% end %>
+      </div>
+    <% end %>
+  </section>
 </div>

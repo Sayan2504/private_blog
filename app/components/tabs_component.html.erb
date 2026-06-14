@@ -3,6 +3,6 @@
     <% classes = tab.active \
       ? "px-4 py-2.5 text-sm font-medium text-gray-900 dark:text-gray-100 border-b-2 border-gray-900 dark:border-gray-100 -mb-px" \
       : "px-4 py-2.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 border-b-2 border-transparent hover:border-gray-300 dark:hover:border-gray-600 -mb-px transition-colors" %>
-    <%= link_to tab.label, tab.href, class: classes %>
+    <%= link_to tab.label, tab.href, class: classes, data: { turbo_frame: "posts_feed" } %>
   <% end %>
 </nav>

@@ -1,11 +1,10 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, except: %i[ index show ]
   before_action :set_post, only: %i[ show edit update destroy ]
 
   def index
-    @tab = params[:tab]&.to_s == "drafts" ? "drafts" : "published"
-    @posts = @tab == "drafts" ? Post.drafts : Post.published
-    @recent_posts = Post.published.limit(5)
-    @drafts_count = Post.drafts.count
+    @posts = Post.published.limit(6)
+    @draft_posts = user_signed_in? ? Post.drafts.limit(6) : []
     @published_count = Post.published.count
   end
 

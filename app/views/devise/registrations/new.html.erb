@@ -1,0 +1,44 @@
+<div class="min-h-screen flex items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-8 shadow-sm">
+    <div class="space-y-2 mb-8">
+      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Get started</p>
+      <h1 class="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Create your account</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-300">Join MindCanvas and start sharing your stories.</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), local: true) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="space-y-5">
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+        </div>
+
+        <div>
+          <%= f.label :password, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+          <% if @minimum_password_length %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1.5"><%= @minimum_password_length %> characters minimum</p>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+        </div>
+
+        <div>
+          <%= f.label :password_confirmation, "Confirm password", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+        </div>
+
+        <div class="pt-2">
+          <%= f.submit "Create account", class: "w-full rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white hover:bg-gray-700 transition-colors dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300" %>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="mt-6 border-t border-gray-200 dark:border-gray-700 pt-6">
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Already have an account?
+        <%= link_to "Log in", new_session_path(resource_name), class: "font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+      </p>
+    </div>
+  </div>
+</div>

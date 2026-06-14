@@ -25,7 +25,7 @@
   </head>
 
   <body class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200">
-    <%= render NavbarComponent.new(current_path: request.path) %>
+    <%= render NavbarComponent.new(current_path: request.path, user_signed_in: user_signed_in?) %>
 
     <% if notice.present? %>
       <%= render FlashComponent.new(type: :notice, message: notice) %>

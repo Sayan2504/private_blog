@@ -4,7 +4,7 @@ class Post < ApplicationRecord
   validates :title, presence: true
   validates :slug, presence: true, uniqueness: true
 
-  before_validation :generate_slug, on: :create
+  before_validation :generate_slug
 
   scope :published, -> { where.not(published_at: nil).order(published_at: :desc) }
   scope :drafts, -> { where(published_at: nil).order(updated_at: :desc) }

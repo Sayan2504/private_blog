@@ -1,29 +1,33 @@
-<article class="py-8 group">
-  <div class="flex flex-col space-y-3">
+<article class="group rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+  <div class="flex h-full flex-col gap-4">
     <%= link_to post_path(post), class: "block" do %>
-      <!-- Author & Date -->
-      <div class="flex items-center space-x-2 text-sm">
+      <div class="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+        <span><%= post.published? ? "Published" : "Draft" %></span>
+        <span><%= post.reading_time %> min read</span>
+      </div>
+
+      <div class="mt-3 flex items-center space-x-2 text-sm">
         <%= render AvatarComponent.new(name: post.author, size: :sm) %>
-        <span class="font-medium text-gray-700 dark:text-gray-300"><%= post.author.presence || "Anonymous" %></span>
+        <span class="font-medium text-gray-700 dark:text-gray-200"><%= post.author.presence || "Anonymous" %></span>
         <span class="text-gray-300 dark:text-gray-600">&middot;</span>
         <% if post.published? %>
           <time class="text-gray-500 dark:text-gray-400"><%= post.published_at.strftime("%b %-d, %Y") %></time>
         <% else %>
-          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">Draft</span>
+          <span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-yellow-800 dark:bg-yellow-900/80 dark:text-yellow-100">Draft</span>
         <% end %>
       </div>
 
-      <!-- Title -->
-      <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors leading-tight mt-3">
+      <h2 class="mt-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 transition-colors group-hover:text-gray-700 dark:group-hover:text-gray-200">
         <%= post.title %>
       </h2>
+
+      <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
+        <%= post.content.to_plain_text.truncate(160) %>
+      </p>
     <% end %>
 
-    <!-- Meta -->
-    <div class="flex items-center justify-between pt-2">
-      <div class="flex items-center space-x-3 text-sm text-gray-500 dark:text-gray-400">
-        <span><%= post.reading_time %> min read</span>
-      </div>
+    <div class="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4">
+      <span class="text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">Editor pick</span>
       <div class="flex items-center space-x-3">
         <%= link_to edit_post_path(post), class: "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" do %>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

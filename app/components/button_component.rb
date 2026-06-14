@@ -27,7 +27,9 @@ class ButtonComponent < ViewComponent::Base
   end
 
   def call
-    if @href
+    if @href && @method.present?
+      button_to_link
+    elsif @href
       link_button
     else
       tag_button
@@ -41,15 +43,25 @@ class ButtonComponent < ViewComponent::Base
   end
 
   def link_button
-    link_to @href, class: base_classes, method: @method, data: confirm_data do
+    link_to @href, class: base_classes, method: @method, data: confirm_data, **html_options do
+      button_content
+    end
+  end
+
+  def button_to_link
+    button_to @href, method: @method, class: base_classes, data: confirm_data, form: { class: "inline-flex" }, **html_options do
       button_content
     end
   end
 
   def tag_button
-    content_tag :button, type: @type, class: base_classes, name: @options[:name], value: @options[:value], data: confirm_data do
+    content_tag :button, type: @type, class: base_classes, name: @options[:name], value: @options[:value], data: confirm_data, **html_options do
       button_content
     end
+  end
+
+  def html_options
+    @options.except(:class, :name, :value, :data)
   end
 
   def button_content
@@ -63,6 +75,8 @@ class ButtonComponent < ViewComponent::Base
   end
 
   def confirm_data
-    @confirm ? { turbo_confirm: @confirm } : {}
+    merged = (@options[:data] || {}).dup
+    merged[:turbo_confirm] = @confirm if @confirm
+    merged
   end
 end
