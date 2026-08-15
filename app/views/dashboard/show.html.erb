@@ -45,10 +45,12 @@
       <% if @trending_posts.any? %>
         <ol class="mt-5 divide-y divide-gray-100 dark:divide-gray-800">
           <% @trending_posts.each_with_index do |post, index| %>
-            <li class="flex items-center gap-4 py-3">
-              <span class="w-5 shrink-0 text-sm font-medium text-gray-400 dark:text-gray-500 tabular-nums"><%= index + 1 %></span>
-              <%= link_to post.title, post_path(post), class: "flex-1 truncate text-sm font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
-              <span class="shrink-0 text-sm text-gray-500 dark:text-gray-400 tabular-nums"><%= post.views_count %> views</span>
+            <!-- minmax(0,1fr) on the title column is what lets a long title
+                 truncate instead of widening the whole page. -->
+            <li class="grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-4 py-3">
+              <span class="text-sm font-medium text-gray-400 dark:text-gray-500 tabular-nums"><%= index + 1 %></span>
+              <%= link_to post.title, post_path(post), class: "truncate text-sm font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+              <span class="text-sm text-gray-500 dark:text-gray-400 tabular-nums"><%= post.views_count %> views</span>
             </li>
           <% end %>
         </ol>

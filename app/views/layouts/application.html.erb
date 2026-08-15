@@ -37,7 +37,10 @@
     <div class="flex min-h-0 overflow-hidden">
       <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
 
-      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
+      <!-- min-w-0 is required: without it this flex child refuses to shrink
+           below its content's min-content width, which pushes wide grids and
+           long words into a horizontal scroll under the sidebar. -->
+      <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
         <% if notice.present? %>
           <%= render FlashComponent.new(type: :notice, message: notice) %>
         <% end %>
@@ -45,7 +48,7 @@
           <%= render FlashComponent.new(type: :alert, message: alert) %>
         <% end %>
 
-        <main class="flex min-h-0 flex-1 flex-col">
+        <main class="flex min-h-0 min-w-0 flex-1 flex-col">
           <%= yield %>
         </main>
       </div>

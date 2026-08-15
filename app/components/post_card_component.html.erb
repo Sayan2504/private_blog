@@ -1,4 +1,4 @@
-<article class="group rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+<article class="group min-w-0 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
   <div class="flex h-full flex-col gap-4">
     <%= link_to post_path(post), class: "block" do %>
       <div class="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
@@ -21,7 +21,7 @@
         <%= post.title %>
       </h2>
 
-      <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
+      <p class="mt-3 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 break-words">
         <%= post.content.to_plain_text.truncate(160) %>
       </p>
     <% end %>

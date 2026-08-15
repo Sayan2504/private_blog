@@ -162,6 +162,9 @@ trix-editor {
   border: none;
   padding: 0;
   min-height: 300px;
+  /* An unbroken run of characters would otherwise widen the editor past the
+     content pane and force a horizontal scroll under the sidebar. */
+  overflow-wrap: anywhere;
 }
 
 trix-editor:focus {

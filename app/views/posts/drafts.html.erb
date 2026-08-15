@@ -2,14 +2,9 @@
 <% content_for :sidebar_active, "drafts" %>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
-  <div class="flex flex-col gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 sm:flex-row sm:items-end sm:justify-between">
-    <div>
-      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Drafts <%= @posts.size %></p>
-      <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Saved ideas, ready when you are</h1>
-    </div>
-    <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
-      Write a story
-    <% end %>
+  <div class="border-b border-gray-200 dark:border-gray-700 pb-4">
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Drafts <%= @posts.size %></p>
+    <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Saved ideas, ready when you are</h1>
   </div>
 
   <% if @posts.any? %>
