@@ -24,15 +24,20 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
+  <body class="grid h-screen grid-rows-[auto_1fr_auto] overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
     <%= render HeaderComponent.new(user_signed_in: user_signed_in?) %>
 
     <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-50 hidden bg-black/40 md:hidden"></div>
 
-    <div class="md:flex">
+    <!-- App-shell layout: the body is exactly one viewport tall and never
+         scrolls (h-screen + overflow-hidden), so header/sidebar/footer are a
+         fixed frame. This middle 1fr row is the only scrollable region — the
+         content column below owns the scrollbar, which is why the sidebar
+         stays put no matter how long a post is. -->
+    <div class="flex min-h-0 overflow-hidden">
       <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
 
-      <div class="flex min-h-[calc(100vh-3.5rem-4rem)] flex-1 flex-col">
+      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto">
         <% if notice.present? %>
           <%= render FlashComponent.new(type: :notice, message: notice) %>
         <% end %>
@@ -40,7 +45,7 @@
           <%= render FlashComponent.new(type: :alert, message: alert) %>
         <% end %>
 
-        <main class="flex-1">
+        <main class="flex min-h-0 flex-1 flex-col">
           <%= yield %>
         </main>
       </div>

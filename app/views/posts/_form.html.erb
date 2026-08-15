@@ -39,7 +39,7 @@
   </div>
 
   <!-- Actions -->
-  <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-700">
+  <div class="sticky bottom-0 z-30 flex items-center justify-between border-t border-gray-100 bg-white px-1 py-4 dark:border-gray-700 dark:bg-gray-900">
     <%= render ButtonComponent.new(variant: :ghost, size: :md, href: published_posts_path) do %>
       Cancel
     <% end %>
