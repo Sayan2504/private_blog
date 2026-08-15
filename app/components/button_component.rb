@@ -10,7 +10,7 @@ class ButtonComponent < ViewComponent::Base
   }.freeze
 
   SIZES = {
-    sm: "px-3 py-1.5 text-xs",
+    sm: "px-2.5 py-1 text-xs",
     md: "px-4 py-2 text-sm",
     lg: "px-5 py-2.5 text-sm"
   }.freeze
@@ -39,7 +39,7 @@ class ButtonComponent < ViewComponent::Base
   private
 
   def base_classes
-    "inline-flex items-center font-medium rounded-md cursor-pointer transition-colors #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
+    "inline-flex items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer transition-colors #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
   end
 
   def link_button
@@ -71,7 +71,7 @@ class ButtonComponent < ViewComponent::Base
   def icon_tag
     return nil unless @icon
 
-    content_tag :span, @icon.html_safe, class: "mr-1.5"
+    content_tag :span, @icon.html_safe, class: "inline-flex"
   end
 
   def confirm_data

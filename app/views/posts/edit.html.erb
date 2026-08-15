@@ -1,7 +1,6 @@
 <% content_for :title, "Edit: #{@post.title}" %>
+<% content_for :sidebar_active, "drafts" %>
 
 <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
   <%= render "form", post: @post %>
-</div>
-  <%= link_to "Back to posts", posts_path %>
 </div>

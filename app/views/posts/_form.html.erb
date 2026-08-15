@@ -40,16 +40,16 @@
 
   <!-- Actions -->
   <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-700">
+    <%= render ButtonComponent.new(variant: :ghost, size: :md, href: published_posts_path) do %>
+      Cancel
+    <% end %>
     <div class="flex items-center space-x-3">
-      <%= render ButtonComponent.new(variant: :secondary, size: :lg, type: "submit") do %>
+      <%= render ButtonComponent.new(variant: :secondary, size: :sm, type: "submit") do %>
         Save Draft
       <% end %>
-      <%= render ButtonComponent.new(variant: :success, size: :lg, type: "submit", name: "publish", value: "true") do %>
+      <%= render ButtonComponent.new(variant: :success, size: :sm, type: "submit", name: "publish", value: "true") do %>
         Publish
       <% end %>
     </div>
-    <%= render ButtonComponent.new(variant: :ghost, size: :md, href: posts_path) do %>
-      Cancel
-    <% end %>
   </div>
 <% end %>

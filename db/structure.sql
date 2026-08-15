@@ -169,7 +169,9 @@ CREATE TABLE public.posts (
     updated_at timestamp(6) without time zone NOT NULL,
     author character varying,
     published_at timestamp(6) without time zone,
-    slug character varying
+    slug character varying,
+    views_count integer DEFAULT 0 NOT NULL,
+    user_id bigint
 );
 
 
@@ -385,6 +387,13 @@ CREATE UNIQUE INDEX index_posts_on_slug ON public.posts USING btree (slug);
 
 
 --
+-- Name: index_posts_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_posts_on_user_id ON public.posts USING btree (user_id);
+
+
+--
 -- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -396,6 +405,14 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: posts fk_rails_5b5ddfd518; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.posts
+    ADD CONSTRAINT fk_rails_5b5ddfd518 FOREIGN KEY (user_id) REFERENCES public.users(id);
 
 
 --
@@ -421,7 +438,12 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260815150000'),
+('20260815143000'),
+('20260815140000'),
+('20260815134912'),
 ('20260614052802'),
+('20260524050000'),
 ('20260524043515'),
 ('20260524041505'),
 ('20260524041313'),

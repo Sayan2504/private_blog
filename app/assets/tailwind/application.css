@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Typography styles for blog content */
 @layer base {
   .prose {
@@ -139,69 +141,6 @@
     border-color: #374151;
   }
 
-  /* Trix editor styles */
-  trix-editor {
-    border: none;
-    padding: 0;
-    min-height: 300px;
-  }
-
-  trix-editor:focus {
-    outline: none;
-    box-shadow: none;
-  }
-
-  trix-toolbar {
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .dark trix-toolbar {
-    border-bottom-color: #374151;
-    background-color: transparent;
-  }
-
-  .dark trix-editor {
-    color: #e5e7eb;
-    background-color: transparent;
-  }
-
-  /* Trix toolbar button styles for dark mode */
-  .dark trix-toolbar .trix-button-group {
-    border-color: #374151;
-  }
-
-  .dark trix-toolbar .trix-button {
-    color: #9ca3af;
-    background-color: transparent;
-    border-color: #374151;
-  }
-
-  .dark trix-toolbar .trix-button:hover {
-    color: #e5e7eb;
-    background-color: #374151;
-  }
-
-  .dark trix-toolbar .trix-button.trix-active {
-    background-color: #1f2937;
-    color: #60a5fa;
-  }
-
-  /* Invert the SVG background-image icons to white in dark mode */
-  .dark trix-toolbar .trix-button--icon::before {
-    filter: invert(1);
-  }
-
-  /* Trix toolbar input styling */
-  .dark trix-toolbar input[type="text"],
-  .dark trix-toolbar input[type="url"],
-  .dark trix-toolbar input[type="search"] {
-    background-color: #1f2937;
-    color: #e5e7eb;
-    border-color: #374151;
-  }
-
   /* Line clamp utility */
   .line-clamp-2 {
     display: -webkit-box;
@@ -210,4 +149,197 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+}
+
+/*
+ * Trix editor styles — deliberately OUTSIDE any @layer.
+ * CSS Cascade Layers give unlayered rules priority over layered ones no
+ * matter the source order or specificity, and actiontext.css (which ships
+ * Trix's default toolbar styles) is itself unlayered. Overrides here must
+ * stay unlayered too, or they silently lose to actiontext.css's defaults.
+ */
+trix-editor {
+  border: none;
+  padding: 0;
+  min-height: 300px;
+}
+
+trix-editor:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.dark trix-editor {
+  color: #e5e7eb;
+  background-color: transparent;
+}
+
+/* Toolbar chrome: a single rounded, bordered bar with grouped controls,
+   replacing Trix's default 2000s-era bordered-button-row look. */
+trix-toolbar {
+  display: block;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.625rem;
+  background-color: #f9fafb;
+  padding: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+trix-toolbar .trix-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.125rem;
+  overflow-x: visible;
+}
+
+trix-toolbar .trix-button-group {
+  display: flex;
+  align-items: center;
+  gap: 0.0625rem;
+  margin: 0;
+  padding: 0 0.375rem;
+  border: none;
+  border-right: 1px solid #e5e7eb;
+  border-radius: 0;
+  background: transparent;
+}
+
+trix-toolbar .trix-button-group:first-child {
+  padding-left: 0.125rem;
+}
+
+trix-toolbar .trix-button-group:last-child {
+  border-right: none;
+  padding-right: 0.125rem;
+}
+
+trix-toolbar .trix-button-group-spacer {
+  display: none;
+}
+
+trix-toolbar .trix-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.625rem;
+  min-width: 1.625rem;
+  padding: 0 0.375rem;
+  margin: 0;
+  border: none;
+  border-radius: 0.375rem;
+  background-color: transparent;
+  color: #6b7280;
+  font-size: 0.625rem;
+  font-weight: 600;
+  outline: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+trix-toolbar .trix-button:not(:first-child) {
+  border-left: none;
+}
+
+trix-toolbar .trix-button:hover:not(:disabled) {
+  background-color: #e5e7eb;
+  color: #111827;
+}
+
+trix-toolbar .trix-button.trix-active {
+  background-color: #111827;
+  color: #fff;
+}
+
+/* Active button sits on a dark pill; invert the icon so it stays visible. */
+trix-toolbar .trix-button.trix-active::before {
+  filter: invert(1);
+}
+
+trix-toolbar .trix-button:disabled {
+  color: #d1d5db;
+}
+
+trix-toolbar .trix-button--icon::before {
+  opacity: 0.8;
+}
+
+trix-toolbar .trix-button--icon:hover::before {
+  opacity: 1;
+}
+
+trix-toolbar .trix-dialog {
+  border-radius: 0.75rem;
+  border-top: none;
+  box-shadow: 0 10px 30px -5px rgb(0 0 0 / 0.15);
+}
+
+trix-toolbar .trix-input--dialog {
+  border-radius: 0.5rem;
+  border-color: #e5e7eb;
+}
+
+trix-toolbar .trix-button--dialog {
+  height: auto;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: #111827;
+  color: #fff;
+}
+
+/* Dark mode */
+.dark trix-toolbar {
+  background-color: #111827;
+  border-color: #374151;
+}
+
+.dark trix-toolbar .trix-button-group {
+  border-right-color: #374151;
+}
+
+.dark trix-toolbar .trix-button {
+  color: #9ca3af;
+}
+
+.dark trix-toolbar .trix-button:hover:not(:disabled) {
+  background-color: #1f2937;
+  color: #f3f4f6;
+}
+
+.dark trix-toolbar .trix-button.trix-active {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.dark trix-toolbar .trix-button:disabled {
+  color: #4b5563;
+}
+
+/* Invert the SVG background-image icons to white in dark mode, except the
+   active pill (light background), which keeps the icon dark. */
+.dark trix-toolbar .trix-button--icon::before {
+  filter: invert(1);
+}
+
+.dark trix-toolbar .trix-button.trix-active::before {
+  filter: invert(0);
+}
+
+.dark trix-toolbar .trix-dialog {
+  background-color: #111827;
+  border: 1px solid #374151;
+  box-shadow: 0 10px 30px -5px rgb(0 0 0 / 0.4);
+}
+
+.dark trix-toolbar .trix-button--dialog {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+/* Trix toolbar input styling */
+.dark trix-toolbar input[type="text"],
+.dark trix-toolbar input[type="url"],
+.dark trix-toolbar input[type="search"] {
+  background-color: #1f2937;
+  color: #e5e7eb;
+  border-color: #374151;
 }

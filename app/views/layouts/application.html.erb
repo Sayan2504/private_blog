@@ -24,19 +24,27 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200">
-    <%= render NavbarComponent.new(current_path: request.path, user_signed_in: user_signed_in?) %>
+  <body class="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
+    <%= render HeaderComponent.new(user_signed_in: user_signed_in?) %>
 
-    <% if notice.present? %>
-      <%= render FlashComponent.new(type: :notice, message: notice) %>
-    <% end %>
-    <% if alert.present? %>
-      <%= render FlashComponent.new(type: :alert, message: alert) %>
-    <% end %>
+    <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-50 hidden bg-black/40 md:hidden"></div>
 
-    <main class="flex-1 pb-16">
-      <%= yield %>
-    </main>
+    <div class="md:flex">
+      <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
+
+      <div class="flex min-h-[calc(100vh-3.5rem-4rem)] flex-1 flex-col">
+        <% if notice.present? %>
+          <%= render FlashComponent.new(type: :notice, message: notice) %>
+        <% end %>
+        <% if alert.present? %>
+          <%= render FlashComponent.new(type: :alert, message: alert) %>
+        <% end %>
+
+        <main class="flex-1">
+          <%= yield %>
+        </main>
+      </div>
+    </div>
 
     <%= render FooterComponent.new %>
   </body>
