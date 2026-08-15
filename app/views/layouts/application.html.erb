@@ -48,7 +48,12 @@
           <%= render FlashComponent.new(type: :alert, message: alert) %>
         <% end %>
 
-        <main class="flex min-h-0 min-w-0 flex-1 flex-col">
+        <%# [&>*]:w-full is global on purpose: a page container using
+            "max-w-* mx-auto" is a flex item here, and its auto side margins
+            cancel the default stretch, collapsing it to fit-content. Forcing
+            width:100% on direct children keeps every page — current and
+            future — at the same measure regardless of how much it contains. %>
+        <main class="flex min-h-0 min-w-0 flex-1 flex-col [&>*]:w-full">
           <%= yield %>
         </main>
       </div>
