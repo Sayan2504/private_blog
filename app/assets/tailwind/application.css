@@ -346,3 +346,254 @@ trix-toolbar .trix-button--dialog {
   color: #e5e7eb;
   border-color: #374151;
 }
+
+/* ---------------------------------------------------------------------------
+   Motion
+   ---------------------------------------------------------------------------
+   Restrained, professional motion: short ease-out entrances, a small stagger
+   between siblings, and spring-like feedback only on direct interaction.
+   Nothing loops, nothing bounces on its own.
+
+   Unlayered on purpose, for the same reason as the Trix rules above.
+--------------------------------------------------------------------------- */
+
+@theme {
+  /* Exposed as the `ease-soft` / `ease-spring` Tailwind utilities. */
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+/* Scroll-triggered reveal, driven by reveal_controller.js.
+   The hidden state is scoped to .js (set in the layout's head script) so the
+   page stays fully readable if JavaScript never runs. */
+.js [data-reveal-item] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+
+/* Declaring the transition on the revealed state only means elements ease in
+   but never animate backwards out. */
+.js [data-reveal-item].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 450ms var(--ease-soft),
+    transform 450ms var(--ease-soft);
+}
+
+@keyframes motion-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Flash messages arrive rather than appear. */
+.motion-flash {
+  animation: motion-slide-down 320ms var(--ease-soft) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal-item] {
+    opacity: 1;
+    transform: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* Cards deal out from a stack — reveal_controller.js piles them on the first
+   card's position, then clears the offset so they slide into their grid slots.
+   The longer duration gives the fan-out room to read. */
+.js [data-reveal-item].is-revealed.is-dealt {
+  transition:
+    opacity 520ms var(--ease-soft),
+    transform 620ms var(--ease-soft);
+}
+
+/* --- Theme curtain -------------------------------------------------------
+   Dark/light swaps run through the View Transitions API. The outgoing page
+   holds still while the incoming one is drawn down over it like a curtain. */
+
+.theme-instant,
+.theme-instant *,
+.theme-instant *::before,
+.theme-instant *::after {
+  transition: none !important;
+}
+
+@keyframes theme-curtain {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Page navigations: the frame is pixel-identical between pages, so a root
+   cross-fade reads as the content alone changing. */
+::view-transition-old(root) {
+  animation-duration: 200ms;
+  animation-timing-function: var(--ease-soft);
+}
+
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: var(--ease-soft);
+}
+
+/* The curtain is only for theme changes — darkmode_controller.js flags the
+   document for the duration of that one transition. */
+:root.theme-switch::view-transition-old(root) {
+  animation: none;
+  z-index: 0;
+}
+
+:root.theme-switch::view-transition-new(root) {
+  animation: theme-curtain 620ms var(--ease-soft) both;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}
+
+
+/* A card morphs into the article header it opens, and the remaining cards
+   glide to their new positions when one is deleted — both fall out of pairing
+   `post-<id>` names across the two pages. */
+::view-transition-group(*) {
+  animation-duration: 420ms;
+  animation-timing-function: var(--ease-soft);
+}
+
+/* Prose arrives block by block, deliberately quicker and shallower than the
+   page-level reveals — it should never make you wait to read. */
+.js [data-reveal-item][data-reveal-fast] {
+  transform: translateY(8px);
+}
+
+.js [data-reveal-item][data-reveal-fast].is-revealed {
+  transition:
+    opacity 240ms var(--ease-soft),
+    transform 240ms var(--ease-soft);
+}
+
+/* Auth cards settle in rather than slide. */
+.js [data-reveal-item][data-reveal-scale] {
+  transform: translateY(10px) scale(0.985);
+}
+
+/* Reading progress. Scroll-driven where supported, so it rides the compositor
+   on long articles; progress_controller.js drives --reading-progress if not. */
+.reading-progress {
+  transform-origin: 0 50%;
+  transform: scaleX(var(--reading-progress, 0));
+}
+
+@supports (animation-timeline: scroll()) {
+  .reading-progress {
+    animation: reading-progress linear both;
+    animation-timeline: scroll(nearest block);
+  }
+}
+
+@keyframes reading-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* The editor's action bar only casts a shadow while it is actually floating
+   over content. */
+.motion-elevate {
+  transition:
+    box-shadow 200ms var(--ease-soft),
+    border-color 200ms var(--ease-soft);
+}
+
+.motion-elevate.is-elevated {
+  box-shadow: 0 -10px 22px -14px rgb(0 0 0 / 0.45);
+}
+
+/* Flash messages leave the way they arrived. */
+.motion-flash {
+  overflow: hidden;
+}
+
+.motion-flash.is-dismissed {
+  opacity: 0;
+  height: 0 !important;
+  margin-top: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 240ms var(--ease-soft),
+    height 280ms var(--ease-soft),
+    margin-top 280ms var(--ease-soft),
+    transform 240ms var(--ease-soft);
+}
+
+/* The active-nav pill slides between items instead of blinking across. */
+.nav-pill {
+  view-transition-name: nav-active;
+}
+
+
+/* Scroll-scrubbed reading.
+   Each word carries its own view() timeline, so its opacity is a pure function
+   of where it sits in the scrollport: dim below the reading band, clear once
+   it has risen through it, and dim again if you scrub back up. No scroll
+   handler is involved — this runs off the compositor.
+
+   reader_controller.js only adds .is-scrubbing when the browser supports the
+   timeline, so text is never left dimmed with nothing to un-dim it. */
+@keyframes word-clear {
+  to {
+    opacity: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .is-scrubbing .word {
+    opacity: 0.28;
+  }
+
+  /* Only blocks near the reading band carry live timelines. */
+  .is-scrubbing .is-live .word {
+    animation: word-clear linear both;
+    animation-timeline: view(block);
+    animation-range: cover 35% cover 55%;
+  }
+
+  /* Already read and out of range: pinned clear, no timeline. */
+  .is-scrubbing .is-read .word {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .is-scrubbing .word {
+    opacity: 1;
+    animation: none;
+  }
+}

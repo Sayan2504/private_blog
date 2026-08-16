@@ -1,4 +1,6 @@
-<header class="mb-8">
+<%# Shares its name with this post's card, so the card morphs into this header
+    on the way in (see the view-transition rules in application.css). %>
+<header class="mb-8" style="view-transition-name: post-<%= post.id %>">
   <h1 class="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-tight mb-4">
     <%= post.title %>
   </h1>

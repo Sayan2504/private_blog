@@ -39,17 +39,23 @@
   </div>
 
   <!-- Actions -->
-  <div class="sticky bottom-0 z-30 flex items-center justify-between border-t border-gray-100 bg-white px-1 py-4 dark:border-gray-700 dark:bg-gray-900">
-    <%= render ButtonComponent.new(variant: :ghost, size: :md, href: published_posts_path) do %>
-      Cancel
-    <% end %>
-    <div class="flex items-center space-x-3">
-      <%= render ButtonComponent.new(variant: :secondary, size: :sm, type: "submit") do %>
-        Save Draft
+  <div data-controller="elevate">
+    <div data-elevate-target="bar" class="motion-elevate sticky bottom-0 z-30 flex items-center justify-between border-t border-gray-100 bg-white px-1 py-4 dark:border-gray-700 dark:bg-gray-900">
+      <%= render ButtonComponent.new(variant: :ghost, size: :md, href: published_posts_path) do %>
+        Cancel
       <% end %>
-      <%= render ButtonComponent.new(variant: :success, size: :sm, type: "submit", name: "publish", value: "true") do %>
-        Publish
-      <% end %>
+      <div class="flex items-center space-x-3">
+        <%= render ButtonComponent.new(variant: :secondary, size: :sm, type: "submit") do %>
+          Save Draft
+        <% end %>
+        <%= render ButtonComponent.new(variant: :success, size: :sm, type: "submit", name: "publish", value: "true") do %>
+          Publish
+        <% end %>
+      </div>
     </div>
+
+    <%# Marks where the bar comes to rest — once this is on screen the bar is
+        no longer floating, so the shadow comes off. %>
+    <div data-elevate-target="sentinel" class="h-px"></div>
   </div>
 <% end %>

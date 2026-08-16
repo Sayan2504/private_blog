@@ -6,8 +6,16 @@
       if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
       }
+      // Gates the reveal animations' hidden start state, so content is never
+      // stuck invisible when JavaScript is unavailable.
+      document.documentElement.classList.add('js');
     </script>
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%# Turbo 8 runs same-origin navigations through the View Transitions API.
+        The frame (header/sidebar/footer) is identical between pages, so the
+        root cross-fade only ever shows on the content, while named elements
+        — post cards and the article header — morph between the two. %>
+    <meta name="view-transition" content="same-origin">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -42,7 +50,7 @@
       <!-- min-w-0 is required: without it this flex child refuses to shrink
            below its content's min-content width, which pushes wide grids and
            long words into a horizontal scroll under the sidebar. -->
-      <div class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
+      <div data-scroll-root class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
         <% if notice.present? %>
           <%= render FlashComponent.new(type: :notice, message: notice) %>
         <% end %>
@@ -55,7 +63,7 @@
             cancel the default stretch, collapsing it to fit-content. Forcing
             width:100% on direct children keeps every page — current and
             future — at the same measure regardless of how much it contains. %>
-        <main class="flex min-h-0 min-w-0 flex-1 flex-col [&>*]:w-full">
+        <main data-controller="reveal" class="flex min-h-0 min-w-0 flex-1 flex-col [&>*]:w-full">
           <%= yield %>
         </main>
       </div>

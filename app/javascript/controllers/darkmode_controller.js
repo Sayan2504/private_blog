@@ -14,10 +14,40 @@ export default class extends Controller {
   }
 
   toggle() {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+    // The curtain is a View Transition: the browser snapshots the page, we
+    // flip the theme, and ::view-transition-new(root) wipes the new snapshot
+    // down over the old one (see application.css). Browsers without the API
+    // just get the plain switch.
+    if (reduced || !document.startViewTransition) {
+      this.applyTheme()
+      return
+    }
+
+    // Flags the curtain rules for this transition only — page navigations go
+    // through the same API and must keep their plain cross-fade.
+    document.documentElement.classList.add("theme-switch")
+
+    const transition = document.startViewTransition(() => this.applyTheme())
+    transition.finished.finally(() => {
+      document.documentElement.classList.remove("theme-switch")
+    })
+  }
+
+  applyTheme() {
+    // Colour transitions have to be off for the flip itself: the new snapshot
+    // is captured immediately, and would otherwise catch the page mid-fade.
+    document.documentElement.classList.add("theme-instant")
+
     document.documentElement.classList.toggle("dark")
     const isDark = document.documentElement.classList.contains("dark")
     localStorage.setItem("theme", isDark ? "dark" : "light")
     this.updateIcon()
+
+    requestAnimationFrame(() => {
+      document.documentElement.classList.remove("theme-instant")
+    })
   }
 
   updateIcon() {

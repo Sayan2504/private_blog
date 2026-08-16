@@ -39,7 +39,7 @@ class ButtonComponent < ViewComponent::Base
   private
 
   def base_classes
-    "inline-flex items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer transition-colors #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
+    "inline-flex items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer transition-[color,background-color,border-color,box-shadow,scale] duration-200 ease-soft active:scale-[0.97] #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
   end
 
   def link_button

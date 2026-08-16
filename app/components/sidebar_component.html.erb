@@ -1,6 +1,6 @@
 <aside
   data-sidebar-target="panel"
-  class="fixed inset-y-0 left-0 z-[60] flex w-72 -translate-x-full flex-col overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-200 ease-out dark:border-gray-700 dark:bg-gray-950 md:static md:z-30 md:h-full md:w-64 md:translate-x-0 md:shrink-0"
+  class="fixed inset-y-0 left-0 z-[60] flex w-72 -translate-x-full flex-col overflow-y-auto border-r border-gray-200 bg-white transition-transform duration-300 ease-soft dark:border-gray-700 dark:bg-gray-950 md:static md:z-30 md:h-full md:w-64 md:translate-x-0 md:shrink-0"
 >
   <div class="flex items-center justify-end px-5 pt-5 md:hidden">
     <button data-action="sidebar#close" class="p-1.5 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300" aria-label="Close menu">
@@ -10,9 +10,17 @@
 
   <nav class="mt-2 flex-1 space-y-1 px-3 md:mt-6">
     <% nav_items.each do |item| %>
-      <%= link_to item.href, class: "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors #{item.active ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'}" do %>
-        <%= nav_icon(item.icon) %>
-        <%= item.label %>
+      <%= link_to item.href, class: "relative flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-[background-color,color,translate] duration-200 ease-soft #{item.active ? 'text-white dark:text-gray-900' : 'text-gray-500 hover:translate-x-0.5 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'}" do %>
+        <%# The pill is its own element so it can carry a view-transition-name
+            and slide between nav items across a page change, rather than
+            blinking out here and in again there. %>
+        <% if item.active %>
+          <span class="nav-pill absolute inset-0 rounded-xl bg-gray-900 dark:bg-gray-100"></span>
+        <% end %>
+        <span class="relative flex items-center gap-3">
+          <%= nav_icon(item.icon) %>
+          <%= item.label %>
+        </span>
       <% end %>
     <% end %>
   </nav>
