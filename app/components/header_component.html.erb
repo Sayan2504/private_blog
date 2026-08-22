@@ -12,8 +12,8 @@
   class="chrome-bar pointer-events-none absolute inset-x-0 top-0 z-40 flex items-center justify-end gap-2 px-2 py-2 min-[425px]:px-4 min-[425px]:py-3"
 >
   <div class="chrome-cluster pointer-events-auto mr-auto flex min-w-0 items-center gap-1.5 rounded-full p-1.5 min-[425px]:gap-2 min-[425px]:px-3 min-[425px]:py-2 md:hidden">
-    <button data-action="sidebar#open" class="shrink-0 rounded-full p-1 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100" aria-label="Open menu">
-      <svg class="w-5 h-5 min-[425px]:w-6 min-[425px]:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    <button data-action="sidebar#open" class="icon-button rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100" aria-label="Open menu">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
     </button>
     <%= link_to root_path, class: "flex min-w-0 items-center gap-1.5 min-[425px]:gap-2" do %>
       <svg class="w-5 h-5 shrink-0 text-gray-900 dark:text-gray-100 min-[425px]:w-6 min-[425px]:h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -28,8 +28,8 @@
       <span class="hidden min-[425px]:inline">Write</span>
     <% end %>
 
-    <button data-action="darkmode#toggle" data-darkmode-target="icon" class="cursor-pointer rounded-full p-1.5 text-gray-500 transition-[background-color,color,rotate,scale] duration-300 ease-spring hover:rotate-12 hover:bg-gray-100 hover:text-gray-700 active:scale-90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" aria-label="Toggle theme">
-      <svg class="w-4 h-4 min-[425px]:w-5 min-[425px]:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+    <button data-action="darkmode#toggle" data-darkmode-target="icon" class="icon-button cursor-pointer rounded-full text-gray-500 transition-[background-color,color,rotate,scale] duration-500 ease-spring hover:rotate-12 hover:bg-gray-100 hover:text-gray-700 active:scale-90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" aria-label="Toggle theme">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
     </button>
 
     <% if user_signed_in %>

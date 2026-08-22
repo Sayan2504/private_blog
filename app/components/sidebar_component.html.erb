@@ -1,11 +1,15 @@
-<%# A panel, not a column: it sits flush to the viewport edge and is told apart
-    from the page canvas by tone alone — no rule, no radius, no shadow. It owns
-    the brand mark and its own footer chip, so the app frame has no separate
-    footer band. Only the nav scrolls; `mt-auto` on the footer holds it at the
-    bottom of a column that is always exactly as tall as the panel. %>
+<%# An element on the page, not a region of it: inset from every edge so both
+    of its side rules are visible, and drawn only by that rule — the fill
+    matches the canvas behind it. It owns the brand mark and its own footer
+    chip, so the app frame has no separate footer band. Only the nav scrolls;
+    `mt-auto` on the footer holds it at the bottom of a column that is always
+    exactly as tall as the panel.
+
+    overflow-hidden is what keeps the nav's hover fills and scroll inside the
+    12px corners instead of squaring them off. %>
 <aside
   data-sidebar-target="panel"
-  class="surface-panel fixed inset-y-0 left-0 z-[60] flex w-72 -translate-x-full flex-col shadow-2xl transition-transform duration-300 ease-soft md:static md:z-30 md:w-64 md:translate-x-0 md:shrink-0 md:shadow-none"
+  class="surface-panel fixed inset-y-3 left-3 z-[60] flex w-72 -translate-x-full flex-col overflow-hidden shadow-2xl transition-transform duration-500 ease-soft md:static md:z-30 md:m-3 md:w-64 md:translate-x-0 md:shrink-0 md:shadow-none"
 >
   <div class="flex shrink-0 items-center justify-between gap-2 px-5 pt-5">
     <%= link_to root_path, class: "flex min-w-0 items-center gap-2" do %>
@@ -15,19 +19,21 @@
       <span class="truncate text-base font-bold tracking-tight text-gray-900 dark:text-gray-100">MindCanvas</span>
     <% end %>
 
-    <button data-action="sidebar#close" class="shrink-0 rounded-full p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300 md:hidden" aria-label="Close menu">
+    <button data-action="sidebar#close" class="icon-button rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300 md:hidden" aria-label="Close menu">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
   </div>
 
   <nav class="min-h-0 flex-1 space-y-1 overflow-y-auto px-3 pt-6 pb-2">
     <% nav_items.each do |item| %>
-      <%= link_to item.href, class: "relative flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-[background-color,color,translate] duration-200 ease-soft #{item.active ? 'text-white dark:text-gray-900' : 'text-gray-500 hover:translate-x-0.5 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'}" do %>
-        <%# The pill is its own element so it can carry a view-transition-name
-            and slide between nav items across a page change, rather than
-            blinking out here and in again there. %>
+      <%# The whole active link carries the view-transition-name (see .nav-active
+          in application.css) — not just the pill inside it. The pill and the
+          label have to travel as one element, or they animate on two different
+          clocks and the text colour visibly lags the background sliding out
+          from under it. %>
+      <%= link_to item.href, class: "relative flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-[background-color,color,translate] duration-300 ease-soft #{item.active ? 'nav-active text-white dark:text-gray-900' : 'text-gray-500 hover:translate-x-0.5 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'}" do %>
         <% if item.active %>
-          <span class="nav-pill absolute inset-0 rounded-xl bg-gray-900 dark:bg-gray-100"></span>
+          <span class="absolute inset-0 rounded-xl bg-gray-900 dark:bg-gray-100"></span>
         <% end %>
         <span class="relative flex items-center gap-3">
           <%= nav_icon(item.icon) %>

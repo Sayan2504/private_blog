@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Fallback only — the real duration is read back off each element.
-const REVEAL_MS = 450
+const REVEAL_MS = 620
 
 // Prose blocks reveal on a much tighter heel than page furniture.
-const FAST_STAGGER = 30
+const FAST_STAGGER = 45
 
 // Reveals [data-reveal-item] elements as they enter the scroll pane, with a
 // small stagger between items that land together. Each item is revealed once
@@ -14,8 +14,12 @@ const FAST_STAGGER = 30
 // piled on the first card's position and deal out into their own slots.
 export default class extends Controller {
   static values = {
-    stagger: { type: Number, default: 70 },
-    maxStagger: { type: Number, default: 6 }
+    stagger: { type: Number, default: 150 },
+    // Caps how far the cascade can run so a long list's last item is not left
+    // waiting seconds. It still has to clear a full screen of furniture: at 6
+    // the dashboard's trailing heading and both post cards collapsed onto one
+    // delay and arrived together, which is exactly what the cascade is for.
+    maxStagger: { type: Number, default: 12 }
   }
 
   connect() {
@@ -23,6 +27,11 @@ export default class extends Controller {
 
     this.items = Array.from(this.element.querySelectorAll("[data-reveal-item]"))
     if (this.items.length === 0) return
+
+    // Document order, captured once. IntersectionObserver hands entries back in
+    // whatever order it detected them, so this is what lets a batch be replayed
+    // top to bottom rather than in discovery order.
+    this.order = new Map(this.items.map((item, index) => [item, index]))
 
     this.timers = new Set()
 
@@ -112,6 +121,7 @@ export default class extends Controller {
   reveal(entries) {
     entries
       .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => this.order.get(a.target) - this.order.get(b.target))
       .forEach((entry, index) => {
         const item = entry.target
         const step = "revealFast" in item.dataset ? FAST_STAGGER : this.staggerValue

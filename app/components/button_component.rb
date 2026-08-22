@@ -6,13 +6,21 @@ class ButtonComponent < ViewComponent::Base
     secondary: "bg-white text-gray-700 hover:bg-gray-50 border border-gray-300 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700 dark:border-gray-600",
     success: "bg-green-600 text-white hover:bg-green-700 border border-green-600 dark:bg-green-500 dark:hover:bg-green-600 dark:border-green-500",
     danger: "bg-red-600 text-white hover:bg-red-700 border border-red-600 dark:bg-red-500 dark:hover:bg-red-600 dark:border-red-500",
-    ghost: "bg-transparent text-gray-500 hover:text-gray-700 border-0 dark:text-gray-400 dark:hover:text-gray-200"
+    ghost: "bg-transparent text-gray-500 hover:text-gray-700 border-0 dark:text-gray-400 dark:hover:text-gray-200",
+    ghost_danger: "bg-transparent text-red-500 hover:text-red-700 border-0 dark:text-red-400 dark:hover:text-red-300"
   }.freeze
 
+  # A fixed height per tier — not just padding — is what actually guarantees
+  # every button of a given size renders at the same pixel height regardless
+  # of resolution. Padding-only sizing looked fine until a bordered variant
+  # (primary, secondary, success, danger) sat next to a borderless one
+  # (ghost): border-box still adds the 1px border on top of the padding, so
+  # the borderless button quietly rendered 2px shorter than its neighbour.
+  # An explicit h-* absorbs the border inside the box instead.
   SIZES = {
-    sm: "px-2.5 py-1 text-xs",
-    md: "px-4 py-2 text-sm",
-    lg: "px-5 py-2.5 text-sm"
+    sm: "h-8 px-3 text-xs",
+    md: "h-10 px-4 text-sm",
+    lg: "h-11 px-5 text-sm"
   }.freeze
 
   def initialize(variant: :primary, size: :md, href: nil, method: nil, icon: nil, confirm: nil, type: "button", **options)
@@ -39,7 +47,7 @@ class ButtonComponent < ViewComponent::Base
   private
 
   def base_classes
-    "inline-flex items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer transition-[color,background-color,border-color,box-shadow,scale] duration-200 ease-soft active:scale-[0.97] #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
+    "inline-flex shrink-0 items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer transition-[color,background-color,border-color,box-shadow,scale] duration-300 ease-soft active:scale-[0.97] #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
   end
 
   def link_button

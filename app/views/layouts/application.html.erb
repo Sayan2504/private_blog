@@ -16,6 +16,20 @@
         root cross-fade only ever shows on the content, while named elements
         — post cards and the article header — morph between the two. %>
     <meta name="view-transition" content="same-origin">
+
+    <%# Turbo normally paints a cached snapshot of the destination first, then
+        swaps in the real response — two renders for one navigation. That
+        collides badly with the scroll reveals: the snapshot is cached *after*
+        reveal_controller has settled and stripped every [data-reveal-item], so
+        the preview arrives fully visible with no animation, and the real
+        response then puts the markers back, hides it all and replays the
+        entrance. The page appeared, vanished and animated in again.
+
+        no-preview keeps the snapshot cache (so back/forward still restore
+        instantly) but stops it being shown ahead of the response, leaving
+        exactly one render per navigation. %>
+    <meta name="turbo-cache-control" content="no-preview">
+
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -34,7 +48,7 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
+  <body class="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-300" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
     <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-50 hidden bg-gray-950/40 backdrop-blur-sm md:hidden"></div>
 
     <!-- App-shell layout: the body is exactly one viewport tall and never
@@ -42,10 +56,10 @@
          frame. Only the content column below scrolls, which is why the sidebar
          stays put no matter how long a post is.
 
-         Nothing here is a bordered section: the sidebar is set off from the
-         page canvas by tone alone, the header is a transparent frame holding
-         floating clusters, and flash messages float over the content rather
-         than pushing it down. -->
+         Nothing here is a full-bleed bar: the sidebar is an inset outlined
+         element sharing the canvas fill, the header is a transparent frame
+         holding floating clusters, and flash messages float over the content
+         rather than pushing it down. -->
     <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
 
     <!-- min-w-0 is required: without it this flex child refuses to shrink

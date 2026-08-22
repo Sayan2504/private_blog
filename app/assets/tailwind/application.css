@@ -377,8 +377,8 @@ trix-toolbar .trix-button--dialog {
   opacity: 1;
   transform: none;
   transition:
-    opacity 450ms var(--ease-soft),
-    transform 450ms var(--ease-soft);
+    opacity 620ms var(--ease-soft),
+    transform 620ms var(--ease-soft);
 }
 
 @keyframes motion-slide-down {
@@ -394,7 +394,7 @@ trix-toolbar .trix-button--dialog {
 
 /* Flash messages arrive rather than appear. */
 .motion-flash {
-  animation: motion-slide-down 320ms var(--ease-soft) both;
+  animation: motion-slide-down 440ms var(--ease-soft) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -419,8 +419,8 @@ trix-toolbar .trix-button--dialog {
    The longer duration gives the fan-out room to read. */
 .js [data-reveal-item].is-revealed.is-dealt {
   transition:
-    opacity 520ms var(--ease-soft),
-    transform 620ms var(--ease-soft);
+    opacity 720ms var(--ease-soft),
+    transform 860ms var(--ease-soft);
 }
 
 /* --- Theme curtain -------------------------------------------------------
@@ -446,12 +446,12 @@ trix-toolbar .trix-button--dialog {
 /* Page navigations: the frame is pixel-identical between pages, so a root
    cross-fade reads as the content alone changing. */
 ::view-transition-old(root) {
-  animation-duration: 200ms;
+  animation-duration: 280ms;
   animation-timing-function: var(--ease-soft);
 }
 
 ::view-transition-new(root) {
-  animation-duration: 260ms;
+  animation-duration: 360ms;
   animation-timing-function: var(--ease-soft);
 }
 
@@ -463,7 +463,7 @@ trix-toolbar .trix-button--dialog {
 }
 
 :root.theme-switch::view-transition-new(root) {
-  animation: theme-curtain 620ms var(--ease-soft) both;
+  animation: theme-curtain 880ms var(--ease-soft) both;
   z-index: 1;
 }
 
@@ -480,7 +480,7 @@ trix-toolbar .trix-button--dialog {
    glide to their new positions when one is deleted — both fall out of pairing
    `post-<id>` names across the two pages. */
 ::view-transition-group(*) {
-  animation-duration: 420ms;
+  animation-duration: 580ms;
   animation-timing-function: var(--ease-soft);
 }
 
@@ -492,8 +492,8 @@ trix-toolbar .trix-button--dialog {
 
 .js [data-reveal-item][data-reveal-fast].is-revealed {
   transition:
-    opacity 240ms var(--ease-soft),
-    transform 240ms var(--ease-soft);
+    opacity 340ms var(--ease-soft),
+    transform 340ms var(--ease-soft);
 }
 
 /* Auth cards settle in rather than slide. */
@@ -529,8 +529,8 @@ trix-toolbar .trix-button--dialog {
    resting shadow — the bar carries both classes. */
 .motion-elevate {
   transition:
-    box-shadow 200ms var(--ease-soft),
-    background-color 200ms var(--ease-soft);
+    box-shadow 280ms var(--ease-soft),
+    background-color 280ms var(--ease-soft);
 }
 
 .motion-elevate.is-elevated {
@@ -556,15 +556,62 @@ trix-toolbar .trix-button--dialog {
   margin-top: 0;
   transform: translateY(-6px);
   transition:
-    opacity 240ms var(--ease-soft),
-    height 280ms var(--ease-soft),
-    margin-top 280ms var(--ease-soft),
-    transform 240ms var(--ease-soft);
+    opacity 340ms var(--ease-soft),
+    height 400ms var(--ease-soft),
+    margin-top 400ms var(--ease-soft),
+    transform 340ms var(--ease-soft);
 }
 
-/* The active-nav pill slides between items instead of blinking across. */
-.nav-pill {
+/* The active nav item slides between entries instead of blinking across.
+   The name sits on the whole link — pill *and* label — deliberately. Naming
+   only the pill promoted it into its own transition group while the label
+   stayed behind in the root snapshot, so the pill slid on the group's clock
+   while the label's colour changed on the root cross-fade's: the white text
+   lagged a beat behind the background moving out from under it. One name means
+   one group means one animation, and they cannot drift apart. */
+.nav-active {
   view-transition-name: nav-active;
+}
+
+/* Matched to ::view-transition-new(root) rather than the slower default group
+   clock, so the pill lands exactly as the rest of the page finishes fading —
+   the whole navigation resolves on one beat. The old/new pair is pinned too,
+   or the label cross-fade inside the group would run on the UA default. */
+::view-transition-group(nav-active),
+::view-transition-old(nav-active),
+::view-transition-new(nav-active) {
+  animation-duration: 360ms;
+  animation-timing-function: var(--ease-soft);
+}
+
+/* Post cards and the article header pair up by name so a card morphs into the
+   header it opens. The name comes from a custom property rather than an inline
+   style, purely so the rule below can switch it off — an inline
+   `view-transition-name` would need !important to override. */
+.post-morph {
+  view-transition-name: var(--vt-name);
+}
+
+/* --- Why the theme curtain has to strip every name ------------------------
+   A named element is pulled out of the root snapshot into its own
+   ::view-transition-group, and those groups are siblings of — and painted
+   above — the root group. The curtain animates clip-path on
+   ::view-transition-new(root), so it can only ever clip the root: anything
+   named floats on top of the wipe, un-clipped, and reads as "not part of it."
+   That's the post cards, the article header, and the active nav pill.
+
+   Dropping the names for the duration of a theme switch puts all of them back
+   inside the root snapshot, so the curtain encloses the whole page as one
+   image. This is safe because the pairing only exists to morph a card into an
+   article across a *navigation* — a theme flip is the same page, so there is
+   nothing to morph and nothing is lost.
+
+   The names resolve at snapshot time, and darkmode_controller.js sets
+   .theme-switch before startViewTransition() and clears it only once the
+   transition has finished, so both the old and new captures see `none`. */
+:root.theme-switch .post-morph,
+:root.theme-switch .nav-active {
+  view-transition-name: none;
 }
 
 
@@ -630,16 +677,20 @@ trix-toolbar .trix-button--dialog {
       0 16px 32px -20px rgb(0 0 0 / 0.85);
   }
 
-  /* The sidebar reads as its own plane purely by tone — it sits flush to the
-     viewport edge with no rule, no radius and no shadow, and is told apart
-     from the page canvas the way a sheet of paper is told apart from the desk
-     under it. */
+  /* The sidebar is an outlined element sitting on the page, not a region of
+     it: same fill as the canvas, so only the 18px rounded rule describes it.
+     The fill is stated rather than left transparent because the same panel is
+     an overlay drawer under md, where content passing behind it would
+     otherwise show through. */
   .surface-panel {
-    background-color: #fff;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
   }
 
   .dark .surface-panel {
-    background-color: #111827;
+    background-color: #030712;
+    border-color: #1f2937;
   }
 
   /* A pill that floats on top of a panel of the same colour, so its whole
@@ -657,6 +708,22 @@ trix-toolbar .trix-button--dialog {
     box-shadow:
       0 1px 2px rgb(0 0 0 / 0.4),
       0 8px 18px -10px rgb(0 0 0 / 0.9);
+  }
+
+  /* Every icon-only chrome control (dark mode toggle, sidebar hamburger,
+     sidebar close) shares this one fixed 32px box — the same height as a
+     `sm` ButtonComponent — instead of sizing itself from padding + an icon
+     that grows at a breakpoint. That growth was the actual bug: the same
+     button rendered a different height on either side of 425px, and a
+     text button standing next to it didn't grow to match. Fixed height +
+     fixed icon size means the box is identical at every resolution. */
+  .icon-button {
+    display: inline-flex;
+    height: 2rem;
+    width: 2rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
   }
 
   /* Paired with `.surface-float` on anything that rises to meet the cursor.
@@ -682,8 +749,8 @@ trix-toolbar .trix-button--dialog {
     background-color: transparent;
     box-shadow: none;
     transition:
-      background-color 260ms var(--ease-soft),
-      box-shadow 260ms var(--ease-soft);
+      background-color 360ms var(--ease-soft),
+      box-shadow 360ms var(--ease-soft);
   }
 
   .chrome-bar.is-floating .chrome-cluster {
