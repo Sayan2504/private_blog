@@ -524,16 +524,25 @@ trix-toolbar .trix-button--dialog {
   }
 }
 
-/* The editor's action bar only casts a shadow while it is actually floating
-   over content. */
+/* The editor's action bar only lifts off its surface while it is actually
+   floating over content. Unlayered, so it wins over `.surface-float`'s
+   resting shadow — the bar carries both classes. */
 .motion-elevate {
   transition:
     box-shadow 200ms var(--ease-soft),
-    border-color 200ms var(--ease-soft);
+    background-color 200ms var(--ease-soft);
 }
 
 .motion-elevate.is-elevated {
-  box-shadow: 0 -10px 22px -14px rgb(0 0 0 / 0.45);
+  box-shadow:
+    0 1px 2px rgb(16 24 40 / 0.05),
+    0 -14px 30px -16px rgb(16 24 40 / 0.35);
+}
+
+.dark .motion-elevate.is-elevated {
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.4),
+    0 -18px 34px -18px rgb(0 0 0 / 0.95);
 }
 
 /* Flash messages leave the way they arrived. */
@@ -595,5 +604,100 @@ trix-toolbar .trix-button--dialog {
   .is-scrubbing .word {
     opacity: 1;
     animation: none;
+  }
+}
+
+/* --- Floating shell ------------------------------------------------------
+   Nothing in the app frame is drawn as a bordered section. Depth comes from
+   two things only: a raised surface tint over the page canvas, and a soft
+   drop shadow. Layered in `components` on purpose, so any element can still
+   override a single property with a plain Tailwind utility. */
+
+@layer components {
+  .surface-float {
+    background-color: #fff;
+    box-shadow:
+      0 1px 2px rgb(16 24 40 / 0.04),
+      0 12px 28px -16px rgb(16 24 40 / 0.18);
+  }
+
+  /* Raised surfaces get *lighter* than the canvas in dark mode — the shadow
+     alone carries almost no signal against a near-black background. */
+  .dark .surface-float {
+    background-color: #111827;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.3),
+      0 16px 32px -20px rgb(0 0 0 / 0.85);
+  }
+
+  /* The sidebar reads as its own plane purely by tone — it sits flush to the
+     viewport edge with no rule, no radius and no shadow, and is told apart
+     from the page canvas the way a sheet of paper is told apart from the desk
+     under it. */
+  .surface-panel {
+    background-color: #fff;
+  }
+
+  .dark .surface-panel {
+    background-color: #111827;
+  }
+
+  /* A pill that floats on top of a panel of the same colour, so its whole
+     edge has to come from shadow (light) or a further step up in tone
+     (dark) — a border would put back exactly what we removed. */
+  .surface-chip {
+    background-color: #fff;
+    box-shadow:
+      0 1px 2px rgb(16 24 40 / 0.06),
+      0 6px 16px -8px rgb(16 24 40 / 0.3);
+  }
+
+  .dark .surface-chip {
+    background-color: #1f2937;
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.4),
+      0 8px 18px -10px rgb(0 0 0 / 0.9);
+  }
+
+  /* Paired with `.surface-float` on anything that rises to meet the cursor.
+     Kept in CSS rather than a `hover:shadow-*` utility so the dark palette
+     gets its own lift — Tailwind's shadows all but vanish on a near-black
+     canvas. */
+  .surface-lift:hover {
+    box-shadow:
+      0 2px 4px rgb(16 24 40 / 0.05),
+      0 24px 48px -24px rgb(16 24 40 / 0.35);
+  }
+
+  .dark .surface-lift:hover {
+    box-shadow:
+      0 2px 4px rgb(0 0 0 / 0.45),
+      0 28px 52px -26px rgb(0 0 0 / 1);
+  }
+
+  /* Header clusters ride directly on the page until content passes beneath
+     them, at which point they pick up glass and lift off. `is-floating` is
+     driven by chrome_controller.js. */
+  .chrome-cluster {
+    background-color: transparent;
+    box-shadow: none;
+    transition:
+      background-color 260ms var(--ease-soft),
+      box-shadow 260ms var(--ease-soft);
+  }
+
+  .chrome-bar.is-floating .chrome-cluster {
+    background-color: rgb(255 255 255 / 0.78);
+    backdrop-filter: saturate(180%) blur(14px);
+    box-shadow:
+      0 1px 2px rgb(16 24 40 / 0.05),
+      0 14px 30px -18px rgb(16 24 40 / 0.3);
+  }
+
+  .dark .chrome-bar.is-floating .chrome-cluster {
+    background-color: rgb(17 24 39 / 0.78);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.4),
+      0 18px 34px -20px rgb(0 0 0 / 0.95);
   }
 }

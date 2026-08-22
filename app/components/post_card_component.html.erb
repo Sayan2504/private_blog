@@ -1,4 +1,4 @@
-<article data-reveal-item style="view-transition-name: post-<%= post.id %>" class="group min-w-0 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 shadow-sm transition-all duration-300 ease-soft hover:-translate-y-1 hover:shadow-xl">
+<article data-reveal-item style="view-transition-name: post-<%= post.id %>" class="surface-float surface-lift group min-w-0 rounded-3xl p-6 transition-[transform,box-shadow] duration-300 ease-soft hover:-translate-y-1">
   <div class="flex h-full flex-col gap-4">
     <%= link_to post_path(post), class: "block" do %>
       <div class="flex items-center justify-between text-xs uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
@@ -27,7 +27,7 @@
     <% end %>
 
     <% if owner? %>
-      <div class="mt-auto flex items-center justify-between border-t border-gray-100 dark:border-gray-800 pt-4">
+      <div class="mt-auto flex items-center justify-between pt-4">
         <span class="text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">Editor pick</span>
         <div class="flex items-center space-x-3">
           <%= link_to edit_post_path(post), class: "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors" do %>
@@ -43,7 +43,7 @@
         </div>
       </div>
     <% else %>
-      <div class="mt-auto border-t border-gray-100 dark:border-gray-800 pt-4">
+      <div class="mt-auto pt-4">
         <span class="text-xs uppercase tracking-[0.18em] text-gray-400 dark:text-gray-500">Editor pick</span>
       </div>
     <% end %>

@@ -1,12 +1,11 @@
-<footer class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 transition-colors duration-200">
-  <div class="px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <div class="flex items-center space-x-2">
-        <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-        </svg>
-        <span class="text-sm text-gray-500 dark:text-gray-400">Sayan Sinha &copy; <%= Date.current.year %></span>
-      </div>
-    </div>
+<%# Lives at the bottom of the sidebar panel, as a chip floating on it — the
+    app has no page-level footer band, and nothing separates this from the nav
+    but space. %>
+<footer class="mt-auto shrink-0 px-4 pt-3 pb-5">
+  <div class="surface-chip inline-flex max-w-full items-center gap-2 rounded-full py-1.5 pl-2.5 pr-3.5">
+    <svg class="w-4 h-4 shrink-0 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+    </svg>
+    <span class="truncate text-xs text-gray-500 dark:text-gray-400">Sayan Sinha &copy; <%= Date.current.year %></span>
   </div>
 </footer>

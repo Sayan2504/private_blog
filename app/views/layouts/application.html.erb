@@ -34,29 +34,43 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="grid h-screen grid-rows-[auto_1fr_auto] overflow-hidden bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
-    <%= render HeaderComponent.new(user_signed_in: user_signed_in?) %>
-
-    <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-50 hidden bg-black/40 md:hidden"></div>
+  <body class="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-200" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close">
+    <div data-sidebar-target="overlay" data-action="click->sidebar#close" class="fixed inset-0 z-50 hidden bg-gray-950/40 backdrop-blur-sm md:hidden"></div>
 
     <!-- App-shell layout: the body is exactly one viewport tall and never
-         scrolls (h-screen + overflow-hidden), so header/sidebar/footer are a
-         fixed frame. This middle 1fr row is the only scrollable region — the
-         content column below owns the scrollbar, which is why the sidebar
-         stays put no matter how long a post is. -->
-    <div class="flex min-h-0 overflow-hidden">
-      <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
+         scrolls (h-screen + overflow-hidden), so the sidebar panel is a fixed
+         frame. Only the content column below scrolls, which is why the sidebar
+         stays put no matter how long a post is.
 
-      <!-- min-w-0 is required: without it this flex child refuses to shrink
-           below its content's min-content width, which pushes wide grids and
-           long words into a horizontal scroll under the sidebar. -->
+         Nothing here is a bordered section: the sidebar is set off from the
+         page canvas by tone alone, the header is a transparent frame holding
+         floating clusters, and flash messages float over the content rather
+         than pushing it down. -->
+    <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
+
+    <!-- min-w-0 is required: without it this flex child refuses to shrink
+         below its content's min-content width, which pushes wide grids and
+         long words into a horizontal scroll under the sidebar. `relative`
+         anchors the two overlays below — the header and the flash stack. -->
+    <div data-controller="chrome" class="relative flex min-h-0 min-w-0 flex-1 flex-col">
+      <%= render HeaderComponent.new(user_signed_in: user_signed_in?) %>
+
+      <div class="pointer-events-none absolute inset-x-0 top-14 z-30 min-[425px]:top-[4.5rem]">
+        <div class="pointer-events-auto">
+          <% if notice.present? %>
+            <%= render FlashComponent.new(type: :notice, message: notice) %>
+          <% end %>
+          <% if alert.present? %>
+            <%= render FlashComponent.new(type: :alert, message: alert) %>
+          <% end %>
+        </div>
+      </div>
+
       <div data-scroll-root class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
-        <% if notice.present? %>
-          <%= render FlashComponent.new(type: :notice, message: notice) %>
-        <% end %>
-        <% if alert.present? %>
-          <%= render FlashComponent.new(type: :alert, message: alert) %>
-        <% end %>
+        <%# Reports the moment content starts sliding under the header, so the
+            clusters know when to lift. One pixel tall, so it costs the page
+            layout nothing. %>
+        <div data-chrome-target="sentinel" class="h-px shrink-0"></div>
 
         <%# [&>*]:w-full is global on purpose: a page container using
             "max-w-* mx-auto" is a flex item here, and its auto side margins
@@ -68,7 +82,5 @@
         </main>
       </div>
     </div>
-
-    <%= render FooterComponent.new %>
   </body>
 </html>

@@ -1,14 +1,14 @@
 <% content_for :title, "Dashboard — MindCanvas" %>
 <% content_for :sidebar_active, "dashboard" %>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
-  <div data-reveal-item class="border-b border-gray-200 dark:border-gray-700 pb-4">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-20 lg:pb-12 lg:pt-24">
+  <div data-reveal-item class="pb-2">
     <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Overview</p>
     <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">MindCanvas, at a glance</h1>
   </div>
 
   <% if @published_count.zero? && @draft_count.zero? %>
-    <div data-reveal-item class="mt-8 rounded-3xl border border-dashed border-gray-200 dark:border-gray-700 bg-white/70 dark:bg-gray-900/70 py-16 text-center shadow-sm">
+    <div data-reveal-item class="surface-float mt-8 rounded-3xl py-16 text-center">
       <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
       </svg>
@@ -20,25 +20,25 @@
     </div>
   <% else %>
     <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-      <div data-reveal-item class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 p-5 shadow-sm">
+      <div data-reveal-item class="surface-float rounded-2xl p-5">
         <p class="text-sm text-gray-500 dark:text-gray-400">Published</p>
         <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @published_count %></p>
       </div>
-      <div data-reveal-item class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 p-5 shadow-sm">
+      <div data-reveal-item class="surface-float rounded-2xl p-5">
         <p class="text-sm text-gray-500 dark:text-gray-400">Drafts</p>
         <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @draft_count %></p>
       </div>
-      <div data-reveal-item class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 p-5 shadow-sm">
+      <div data-reveal-item class="surface-float rounded-2xl p-5">
         <p class="text-sm text-gray-500 dark:text-gray-400">Total views</p>
         <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100 tabular-nums"><%= @total_views %></p>
       </div>
-      <div data-reveal-item class="rounded-2xl border border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 p-5 shadow-sm">
+      <div data-reveal-item class="surface-float rounded-2xl p-5">
         <p class="text-sm text-gray-500 dark:text-gray-400">Avg. reading time</p>
         <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @avg_reading_time %> <span class="text-lg font-medium text-gray-400 dark:text-gray-500">min</span></p>
       </div>
     </div>
 
-    <section data-reveal-item class="mt-10 rounded-3xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 p-6 shadow-sm">
+    <section data-reveal-item class="surface-float mt-10 rounded-3xl p-6">
       <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Trending</p>
       <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Most-read stories</h2>
 
@@ -60,7 +60,7 @@
     </section>
 
     <section class="mt-10">
-      <div data-reveal-item class="flex flex-col gap-2 border-b border-gray-200 dark:border-gray-700 pb-4 sm:flex-row sm:items-end sm:justify-between">
+      <div data-reveal-item class="flex flex-col gap-2 pb-2 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">All stories <%= @posts.size %></p>
           <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Everything published on MindCanvas</h2>
