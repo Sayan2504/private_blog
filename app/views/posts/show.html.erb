@@ -7,19 +7,75 @@
     <div data-controller="progress" class="reading-progress h-full w-full rounded-full bg-gray-900 dark:bg-gray-100"></div>
   </div>
 
-  <div class="mt-20 lg:mt-24">
-    <%= render PostHeaderComponent.new(post: @post, current_user: current_user) %>
-  </div>
+  <%# Placeholder and article share one grid cell, so handing over is a
+      cross-fade rather than a reflow — the row is already the finished
+      article's height while the skeleton is on screen. %>
+  <div data-controller="skeleton" class="grid">
+    <%# Mirrors the real structure below it beat for beat: two title lines at
+        the h1's size, the author chip on the same surface-float row, then
+        prose lines on the body's 1.8 line-height rhythm. aria-hidden because
+        the real article is already in the DOM directly underneath — screen
+        readers should never see the placeholder at all. %>
+    <div class="skeleton-layer [grid-area:1/1]" aria-hidden="true">
+      <div class="mt-20 lg:mt-24">
+        <div class="mb-8">
+          <div class="mb-4 space-y-6 sm:space-y-8">
+            <div class="skeleton-bar h-8 w-[92%] sm:h-11"></div>
+            <div class="skeleton-bar h-8 w-[64%] sm:h-11"></div>
+          </div>
 
-  <!-- Article Content -->
-  <div data-reveal-prose data-controller="reader" class="prose prose-lg prose-gray max-w-none break-words">
-    <%= @post.content %>
-  </div>
+          <div class="surface-float flex items-center justify-between gap-4 rounded-2xl px-5 py-4">
+            <div class="flex items-center space-x-3">
+              <div class="skeleton-bar h-10 w-10 rounded-full"></div>
+              <div class="space-y-2">
+                <div class="skeleton-bar h-3.5 w-28"></div>
+                <div class="skeleton-bar h-3 w-44"></div>
+              </div>
+            </div>
+            <div class="hidden items-center gap-2 sm:flex">
+              <div class="skeleton-bar h-8 w-16"></div>
+              <div class="skeleton-bar h-8 w-20"></div>
+            </div>
+          </div>
+        </div>
 
-  <!-- Back Link -->
-  <div data-reveal-item class="mt-4 pt-4">
-    <%= render ButtonComponent.new(variant: :ghost, size: :md, href: dashboard_path, icon: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>') do %>
-      Back to all stories
-    <% end %>
+        <div class="space-y-5">
+          <div class="space-y-4">
+            <div class="skeleton-bar h-4 w-full"></div>
+            <div class="skeleton-bar h-4 w-full"></div>
+            <div class="skeleton-bar h-4 w-[88%]"></div>
+          </div>
+          <div class="space-y-4">
+            <div class="skeleton-bar h-4 w-full"></div>
+            <div class="skeleton-bar h-4 w-[95%]"></div>
+            <div class="skeleton-bar h-4 w-full"></div>
+            <div class="skeleton-bar h-4 w-[72%]"></div>
+          </div>
+          <div class="space-y-4">
+            <div class="skeleton-bar h-4 w-[96%]"></div>
+            <div class="skeleton-bar h-4 w-full"></div>
+            <div class="skeleton-bar h-4 w-[80%]"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-layer [grid-area:1/1]">
+      <div class="mt-20 lg:mt-24">
+        <%= render PostHeaderComponent.new(post: @post, current_user: current_user) %>
+      </div>
+
+      <!-- Article Content -->
+      <div data-reveal-prose data-controller="reader" class="prose prose-lg prose-gray max-w-none break-words">
+        <%= @post.content %>
+      </div>
+
+      <!-- Back Link -->
+      <div data-reveal-item class="mt-4 pt-4">
+        <%= render ButtonComponent.new(variant: :ghost, size: :md, href: dashboard_path, icon: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>') do %>
+          Back to all stories
+        <% end %>
+      </div>
+    </div>
   </div>
 </article>
