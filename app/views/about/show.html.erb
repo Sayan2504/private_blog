@@ -1,0 +1,251 @@
+<% content_for :title, "About — MindCanvas" %>
+<% content_for :sidebar_active, "about" %>
+
+<%# No container of its own: the layout's <main> owns the measure and gutters,
+    so this page lines up with every other one for free.
+
+    Shape of the page, top to bottom: what MindCanvas is -> why it exists ->
+    how it works -> who built it -> where he's worked -> how to reach him.
+    The platform comes first and the person second: a reader landing here is
+    deciding whether to write on MindCanvas, not reading a CV. Connect stays
+    the closing section — it's the one action left once everything else has
+    made its case.
+
+    Two rules this page is held to:
+      * Every hard fact about Sayan — employers, years, links — comes from
+        his own LinkedIn profile. Nothing here is invented, and nothing is
+        lifted from the stories.
+      * No duration is written as a literal number. Anything time-based goes
+        through years_of_experience so the page never goes stale. %>
+
+<%# ---- 1. What this is --------------------------------------------------- %>
+<div data-reveal-item class="pb-2">
+  <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">About</p>
+  <h1 class="mt-2 text-3xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl">
+    A quiet place to write, and to be read.
+  </h1>
+  <p class="mt-4 text-lg text-gray-600 dark:text-gray-300">
+    MindCanvas is a writing platform. Open a draft the moment a thought arrives,
+    keep it to yourself for as long as you need, and publish it to everyone when
+    it's finally saying what you meant.
+  </p>
+</div>
+
+<%# ---- 2. Why it exists -------------------------------------------------- %>
+<section data-reveal-item class="surface-float mt-8 rounded-3xl p-6 sm:p-8">
+  <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Why it exists</p>
+  <div class="mt-4 space-y-4 text-gray-600 dark:text-gray-300">
+    <p>
+      Most half-formed ideas die in a notes app. Not because they were bad, but
+      because the gap between "thought" and "something worth publishing" is where
+      the friction lives — the setup, the formatting, the vague dread of putting
+      an unfinished thing somewhere public.
+    </p>
+    <p>
+      MindCanvas removes the middle of that. Writing starts private and stays
+      private until you say otherwise, so a draft costs you nothing. Publishing is
+      one decision, made once, whenever you're ready — and what's published lands
+      in a shared library anyone can read, next to what everyone else is working
+      through.
+    </p>
+    <p>
+      No topic belongs here more than any other. Craft, work, the thing you got
+      wrong last week, the rabbit hole you're three days into — it's all writing,
+      and it all counts.
+    </p>
+  </div>
+</section>
+
+<%# ---- 3. How it works --------------------------------------------------- %>
+<%# These four cards describe what the app actually does today: drafts are
+    private, publishing is a switch, My stories splits into published/drafts
+    tabs, and All stories is the public shelf. If that behaviour changes, this
+    section changes with it — it is documentation, not decoration. %>
+<section class="mt-10">
+  <div data-reveal-item>
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">The shape of it</p>
+    <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">How writing here works</h2>
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+    <% [
+      ["Start in private", "Every piece begins as a draft that only you can see. Leave it for an hour or for a month — nothing is published until you choose to publish it."],
+      ["Publish in one move", "When a draft is ready, one switch sends it out. No separate export, no second copy to keep in sync."],
+      ["Your shelf, two tabs", "My stories holds everything you've written, published work and drafts side by side, so nothing gets lost between them."],
+      ["A shared library", "All stories is the front page — everything published on MindCanvas, newest first, open to anyone who wants to read."]
+    ].each do |title, blurb| %>
+      <div data-reveal-item data-reveal-top class="surface-float rounded-2xl p-5 sm:p-6">
+        <p class="font-medium text-gray-900 dark:text-gray-100"><%= title %></p>
+        <p class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300"><%= blurb %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-5 flex flex-wrap gap-3">
+    <%= render ButtonComponent.new(href: published_posts_path, variant: :primary) do %>
+      Read what's published
+    <% end %>
+    <% unless user_signed_in? %>
+      <%= render ButtonComponent.new(href: new_user_registration_path, variant: :secondary) do %>
+        Start writing
+      <% end %>
+    <% end %>
+  </div>
+</section>
+
+<%# ---- 4. Who built it --------------------------------------------------- %>
+<section data-reveal-item class="surface-float mt-10 rounded-3xl p-6 sm:p-8">
+  <div class="flex flex-col gap-6 sm:flex-row sm:items-start">
+    <%# transition/hover live on this wrapper rather than AvatarComponent
+        itself — the component is shared everywhere else (post bylines, the
+        header) and shouldn't tilt on hover there. Ease-spring is the same
+        curve the header's theme toggle uses, so the one playful gesture on
+        the page still speaks the app's existing motion language. %>
+    <div class="shrink-0 rounded-full transition-transform duration-500 ease-spring hover:-rotate-3 hover:scale-105">
+      <%= render AvatarComponent.new(name: "Sayan Sinha", size: :xl) %>
+    </div>
+
+    <div class="min-w-0">
+      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Who built it</p>
+      <h2 class="mt-1 text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Sayan Sinha</h2>
+      <p class="mt-1 text-sm uppercase tracking-[0.18em] text-gray-500 dark:text-gray-400">
+        Software engineer &middot; Kolkata, India
+      </p>
+
+      <div class="mt-5 space-y-4 text-gray-600 dark:text-gray-300">
+        <p>
+          I'm a software engineer, and a properly passionate one. <%= years_of_experience %>+ years in,
+          I still care about the same thing I did on day one: building things that are
+          quick, sturdy, and clean enough that whoever opens the file next doesn't groan.
+        </p>
+        <p>
+          I've led teams through the unglamorous parts of shipping, and I've worked
+          shoulder-to-shoulder with hardware and firmware people to get IoT products
+          out of the door. That seam — where software finally has to meet something
+          physical — is where I've learned the most.
+        </p>
+        <p>
+          Somewhere along the way I picked up the Scrum Master seat too, less by plan
+          than by necessity — someone had to keep a team honest about scope and sane
+          about pace, and it turned out to suit me. I'd rather spend an afternoon
+          unblocking a teammate than spend it polishing something alone, and most of
+          what I know about shipping well I learned from watching a team get stuck and
+          figuring out why.
+        </p>
+        <p>
+          Lately that same restlessness has pointed at AI — not as a shortcut around
+          writing code, but as another tool worth actually understanding, the way Rails
+          or Kafka once were. I'm still mostly learning this one in public: trying
+          things, getting a fair share of them wrong, and writing down what's left once
+          the dust settles.
+        </p>
+        <p>
+          MindCanvas came out of wanting a writing home that didn't get in the way. I
+          use it myself, and it's open to anyone who wants the same thing. No pressure
+          to publish, no audience watching a draft take shape — just a place to get a
+          thought out of your head before it disappears, and to let it go public
+          whenever you're ready and not a moment before.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+  <div data-reveal-item data-reveal-top class="surface-float rounded-2xl p-5">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Experience</p>
+    <%# Counts up from zero the moment it scrolls into view — see
+        counter_controller.js. Purely cosmetic: the number rendered here is
+        already the real, final value, so anyone without JS (or with
+        prefers-reduced-motion set) just sees it sitting still. %>
+    <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100" data-controller="counter"><%= years_of_experience %>+ years</p>
+  </div>
+  <div data-reveal-item data-reveal-top class="surface-float rounded-2xl p-5">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Works on</p>
+    <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">Web &amp; IoT</p>
+  </div>
+  <div data-reveal-item data-reveal-top class="surface-float rounded-2xl p-5">
+    <p class="text-sm text-gray-500 dark:text-gray-400">Based in</p>
+    <p class="mt-2 text-2xl font-semibold text-gray-900 dark:text-gray-100">Kolkata, India</p>
+  </div>
+</div>
+
+<%# ---- 5. Where I've worked ----------------------------------------------- %>
+<%# Names only, and no schooling. Titles, dates and degrees belong on a CV —
+    someone deciding whether to write here does not need an employment
+    timeline, only a reason to trust that the person behind it has shipped
+    software before. %>
+<section class="mt-10">
+  <div data-reveal-item>
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Experience</p>
+    <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Where I've worked</h2>
+  </div>
+
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <% [
+      "Rently",
+      "Bit Canny Technologies",
+      "Kreeti Technologies"
+    ].each do |company| %>
+      <div data-reveal-item data-reveal-top class="surface-float rounded-2xl p-5">
+        <p class="font-medium text-gray-900 dark:text-gray-100"><%= company %></p>
+      </div>
+    <% end %>
+  </div>
+</section>
+
+<%# ---- 6. Let's connect ---------------------------------------------------
+    The closing section on purpose: it's the one thing left to do once the
+    page has made its case, not a sign-off competing with the rest. Three
+    networks, so the copy can no longer single one out as "the fastest way"
+    — the row of marks makes the choice, not the sentence above it.
+
+    Plain anchors rather than ButtonComponent: its SIZES are padding built
+    for a text label (px-4 alongside a fixed height), which turns lopsided
+    the moment the label goes away and only the icon is left centered inside
+    it. A fixed h-10 w-10 circle is what an icon-only control actually wants
+    — the same shape as the header's menu/theme icon-buttons — so each mark
+    gets an accessible name via aria-label instead of visible text. %>
+<% social_links = [
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/sayan-sinha-2363a4184/",
+    icon: <<~SVG
+      <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    SVG
+  },
+  {
+    name: "GitHub",
+    href: "https://github.com/Sayan2504",
+    icon: <<~SVG
+      <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.84 1.237 1.84 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+    SVG
+  },
+  {
+    name: "X",
+    href: "https://x.com/sayan_msdian7",
+    icon: <<~SVG
+      <svg viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    SVG
+  }
+] %>
+<section data-reveal-item class="surface-float mt-10 rounded-3xl p-6 sm:p-8">
+  <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Let's connect</p>
+  <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Say hello</h2>
+  <p class="mt-3 text-gray-600 dark:text-gray-300">
+    If something here struck a chord — or you think MindCanvas is missing something
+    obvious — I'd genuinely like to hear about it. Find me wherever you already are.
+  </p>
+
+  <div class="mt-5 flex flex-wrap gap-3">
+    <% social_links.each do |link| %>
+      <a
+        href="<%= link[:href] %>"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="<%= link[:name] %>"
+        class="surface-chip inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-gray-700 transition-[background-color,box-shadow,transform] duration-300 ease-spring hover:-translate-y-0.5 hover:rotate-6 hover:bg-gray-50 active:scale-90 dark:text-gray-200 dark:hover:bg-gray-700"
+      ><%= link[:icon].html_safe %></a>
+    <% end %>
+  </div>
+</section>

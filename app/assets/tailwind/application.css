@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Typography styles for blog content */
+/* Typography styles for story content */
 @layer base {
   .prose {
     font-size: 1.125rem;
@@ -371,20 +371,29 @@ trix-toolbar .trix-button--dialog {
   transform: translateY(14px);
 }
 
+/* An item marked [data-reveal-top] starts slightly above its resting place
+   instead of below it — a quieter alternative to the stacked "deal from a
+   pile" entrance (.is-dealt) for card grids that should read as simple and
+   restrained rather than performing a trick. Same transition, same duration:
+   only the direction it arrives from changes. */
+.js [data-reveal-item][data-reveal-top] {
+  transform: translateY(-14px);
+}
+
 /* Declaring the transition on the revealed state only means elements ease in
    but never animate backwards out. */
 .js [data-reveal-item].is-revealed {
   opacity: 1;
   transform: none;
   transition:
-    opacity 620ms var(--ease-soft),
-    transform 620ms var(--ease-soft);
+    opacity 720ms var(--ease-soft),
+    transform 720ms var(--ease-soft);
 }
 
-@keyframes motion-slide-down {
+@keyframes motion-toast-in {
   from {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateX(18px) scale(0.97);
   }
   to {
     opacity: 1;
@@ -392,9 +401,10 @@ trix-toolbar .trix-button--dialog {
   }
 }
 
-/* Flash messages arrive rather than appear. */
+/* Flash toasts slide in from the edge they are pinned to, rather than
+   dropping out of the header they sit beneath. */
 .motion-flash {
-  animation: motion-slide-down 440ms var(--ease-soft) both;
+  animation: motion-toast-in 500ms var(--ease-soft) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -419,8 +429,8 @@ trix-toolbar .trix-button--dialog {
    The longer duration gives the fan-out room to read. */
 .js [data-reveal-item].is-revealed.is-dealt {
   transition:
-    opacity 720ms var(--ease-soft),
-    transform 860ms var(--ease-soft);
+    opacity 800ms var(--ease-soft),
+    transform 940ms var(--ease-soft);
 }
 
 /* --- Theme curtain -------------------------------------------------------
@@ -444,14 +454,17 @@ trix-toolbar .trix-button--dialog {
 }
 
 /* Page navigations: the frame is pixel-identical between pages, so a root
-   cross-fade reads as the content alone changing. */
+   cross-fade reads as the content alone changing. Old and new share one
+   duration — the previous 280/360 split made the outgoing page vanish
+   faster than the incoming one arrived, so the crossfade read as a slightly
+   different speed on every navigation instead of one consistent motion. */
 ::view-transition-old(root) {
-  animation-duration: 280ms;
+  animation-duration: 380ms;
   animation-timing-function: var(--ease-soft);
 }
 
 ::view-transition-new(root) {
-  animation-duration: 360ms;
+  animation-duration: 380ms;
   animation-timing-function: var(--ease-soft);
 }
 
@@ -480,7 +493,7 @@ trix-toolbar .trix-button--dialog {
    glide to their new positions when one is deleted — both fall out of pairing
    `post-<id>` names across the two pages. */
 ::view-transition-group(*) {
-  animation-duration: 580ms;
+  animation-duration: 640ms;
   animation-timing-function: var(--ease-soft);
 }
 
@@ -492,8 +505,8 @@ trix-toolbar .trix-button--dialog {
 
 .js [data-reveal-item][data-reveal-fast].is-revealed {
   transition:
-    opacity 340ms var(--ease-soft),
-    transform 340ms var(--ease-soft);
+    opacity 380ms var(--ease-soft),
+    transform 380ms var(--ease-soft);
 }
 
 /* Auth cards settle in rather than slide. */
@@ -546,19 +559,43 @@ trix-toolbar .trix-button--dialog {
 }
 
 /* Flash messages leave the way they arrived. */
+/* The toast surface is the header cluster's material — tinted glass and a
+   shadow, no border — so a flash reads as the app's own chrome rather than a
+   coloured block belonging to the page. Meaning lives in the icon instead. */
+.flash-toast {
+  background-color: rgb(255 255 255 / 0.9);
+  backdrop-filter: saturate(180%) blur(14px);
+  box-shadow:
+    0 1px 2px rgb(16 24 40 / 0.06),
+    0 18px 36px -20px rgb(16 24 40 / 0.45);
+}
+
+.dark .flash-toast {
+  background-color: rgb(17 24 39 / 0.9);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.4),
+    0 22px 40px -22px rgb(0 0 0 / 0.95);
+}
+
 .motion-flash {
   overflow: hidden;
 }
 
+/* Leaving retraces the entrance — out towards the right edge — while the box
+   collapses so a toast below it rises into the gap instead of jumping. The
+   padding has to collapse with the height, or a sliver of surface is left
+   behind for the length of the transition. */
 .motion-flash.is-dismissed {
   opacity: 0;
   height: 0 !important;
-  margin-top: 0;
-  transform: translateY(-6px);
+  padding-top: 0;
+  padding-bottom: 0;
+  transform: translateX(18px);
   transition:
-    opacity 340ms var(--ease-soft),
+    opacity 300ms var(--ease-soft),
     height 400ms var(--ease-soft),
-    margin-top 400ms var(--ease-soft),
+    padding-top 400ms var(--ease-soft),
+    padding-bottom 400ms var(--ease-soft),
     transform 340ms var(--ease-soft);
 }
 
@@ -571,6 +608,108 @@ trix-toolbar .trix-button--dialog {
    one group means one animation, and they cannot drift apart. */
 .nav-active {
   view-transition-name: nav-active;
+}
+
+/* --- Segmented control (My stories tabs) ---------------------------------
+   A recessed track holding one pill that slides. The pill is a single element
+   rather than a background handed from link to link, because the tabs drive a
+   turbo-frame and never re-render: if the state is to move, something has to
+   move. tabs_controller.js gives it width and position; the state itself lives
+   in aria-current, so the styling hook and the accessibility hook are the same
+   attribute. */
+.tab-track {
+  position: relative;
+  background-color: #f3f4f6;
+}
+
+.dark .tab-track {
+  background-color: rgb(31 41 55 / 0.6);
+}
+
+.tab-indicator {
+  position: absolute;
+  top: 0.25rem;
+  bottom: 0.25rem;
+  left: 0;
+  width: 0;
+  border-radius: 9999px;
+  background-color: #111827;
+  transition:
+    transform 460ms var(--ease-soft),
+    width 460ms var(--ease-soft);
+}
+
+.dark .tab-indicator {
+  background-color: #f3f4f6;
+}
+
+.tab-link {
+  position: relative;
+  color: #6b7280;
+  transition: color 300ms var(--ease-soft);
+}
+
+.tab-link:hover {
+  color: #111827;
+}
+
+.dark .tab-link {
+  color: #9ca3af;
+}
+
+.dark .tab-link:hover {
+  color: #f3f4f6;
+}
+
+/* Hover is spelled out for the active tab too, or the idle hover colour wins
+   on the one link that must not change. */
+.tab-link[aria-current="page"],
+.tab-link[aria-current="page"]:hover {
+  color: #fff;
+}
+
+.dark .tab-link[aria-current="page"],
+.dark .tab-link[aria-current="page"]:hover {
+  color: #111827;
+}
+
+/* The fallback pill, for the moment before tabs_controller connects and for
+   the page where it never does. .is-ready hands the job to the sliding
+   indicator, so the two are never painted on top of each other. */
+.tab-link[aria-current="page"] {
+  background-color: #111827;
+}
+
+.dark .tab-link[aria-current="page"] {
+  background-color: #f3f4f6;
+}
+
+.tab-track.is-ready .tab-link[aria-current="page"] {
+  background-color: transparent;
+}
+
+.tab-count {
+  color: #9ca3af;
+}
+
+.tab-link[aria-current="page"] .tab-count {
+  color: rgb(255 255 255 / 0.6);
+}
+
+.dark .tab-link[aria-current="page"] .tab-count {
+  color: rgb(17 24 39 / 0.5);
+}
+
+/* turbo-frame is an inline element by default, which would leave the grid
+   inside it sitting in an inline box. The dim is delayed past any local swap,
+   so it only ever shows on a request slow enough to be worth reporting. */
+#stories_panel {
+  display: block;
+}
+
+#stories_panel[busy] {
+  opacity: 0.5;
+  transition: opacity 220ms var(--ease-soft) 180ms;
 }
 
 /* Matched to ::view-transition-new(root) rather than the slower default group
@@ -645,6 +784,34 @@ trix-toolbar .trix-button--dialog {
   .is-scrubbing .is-read .word {
     opacity: 1;
   }
+
+  /* A view() timeline needs room to scroll through — "cover 35% cover 55%"
+     only finishes once the page can scroll roughly half a viewport further
+     past where the block appears. For ordinary paragraphs that scroll room
+     comes from whatever text follows, but the article's last block has
+     nothing below it: the page hits max scroll before the animation reaches
+     55%, and its words are left stranded mid-fade forever, at whatever
+     opacity they'd reached when scrolling ran out.
+
+     This spacer manufactures that missing room. It sits inside .is-scrubbing
+     (the prose element itself), so "Back to all stories" — its next sibling
+     in the DOM — is pushed down by the same amount; the trade-off is a
+     stretch of blank scroll after the last paragraph instead of unreadable
+     dimmed text.
+
+     50vh is deliberate, not a round number. Required room works out to
+     roughly `0.55 * viewport - 0.45 * lastBlockHeight - trailingContent`, so
+     the worst case is a SHORT final block on a TALL viewport (where the
+     fixed-pixel back-link and padding are the smallest share of the screen).
+     Measured in-browser: with a 54px final block at a 1300px viewport, 45vh
+     is the threshold and 40vh strands the text at 0.91. 50vh keeps a margin
+     over that without adding more dead scroll than necessary — don't lower it
+     without re-measuring that worst case. */
+  .is-scrubbing::after {
+    content: "";
+    display: block;
+    height: 50vh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -677,20 +844,18 @@ trix-toolbar .trix-button--dialog {
       0 16px 32px -20px rgb(0 0 0 / 0.85);
   }
 
-  /* The sidebar is an outlined element sitting on the page, not a region of
-     it: same fill as the canvas, so only the 18px rounded rule describes it.
-     The fill is stated rather than left transparent because the same panel is
-     an overlay drawer under md, where content passing behind it would
-     otherwise show through. */
+  /* The sidebar is a raised surface, not an outlined one — same tone-and-
+     shadow idiom as .surface-float, one step lighter than the canvas rather
+     than a border drawn around it. The fill is stated rather than left
+     transparent because the same panel is an overlay drawer under md, where
+     content passing behind it would otherwise show through. */
   .surface-panel {
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
+    background-color: #fff;
     border-radius: 18px;
   }
 
   .dark .surface-panel {
-    background-color: #030712;
-    border-color: #1f2937;
+    background-color: #111827;
   }
 
   /* A pill that floats on top of a panel of the same colour, so its whole
@@ -832,4 +997,19 @@ trix-toolbar .trix-button--dialog {
   to {
     transform: translateX(100%);
   }
+}
+
+/* The years-of-experience stat (counter_controller.js) grows while it ticks
+   upward, then eases back down to its resting size the moment it lands on
+   the final number — the settle itself is the "look here," not just the
+   counting. left-center origin keeps it anchored to where the label above
+   it sits instead of growing symmetrically off both edges. */
+[data-controller="counter"] {
+  display: inline-block;
+  transform-origin: left center;
+  transition: transform 560ms var(--ease-soft);
+}
+
+[data-controller="counter"].is-counting {
+  transform: scale(1.4);
 }

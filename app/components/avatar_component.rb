@@ -4,7 +4,8 @@ class AvatarComponent < ViewComponent::Base
   SIZES = {
     sm: "w-6 h-6 text-xs",
     md: "w-8 h-8 text-sm",
-    lg: "w-10 h-10 text-sm"
+    lg: "w-10 h-10 text-sm",
+    xl: "w-16 h-16 text-2xl"
   }.freeze
 
   def initialize(name:, size: :sm)
@@ -13,7 +14,7 @@ class AvatarComponent < ViewComponent::Base
   end
 
   def call
-    content_tag :div, class: "#{SIZES[@size]} rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center" do
+    content_tag :div, class: "#{SIZES[@size]} shrink-0 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center" do
       content_tag :span, initial, class: "text-white font-medium"
     end
   end

@@ -6,27 +6,38 @@
   <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">MindCanvas, at a glance</h1>
 </div>
 
-<% if @published_count.zero? && @draft_count.zero? %>
-  <div data-reveal-item class="surface-float mt-8 rounded-3xl py-16 text-center">
-    <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
-    </svg>
-    <h3 class="text-base font-medium text-gray-900 dark:text-gray-100 mb-1">No stories yet</h3>
-    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Metrics will show up here once you publish your first post.</p>
-    <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
-      Write your first story
-    <% end %>
-  </div>
+<% if @published_count.zero? && @draft_count.to_i.zero? %>
+  <%# A signed-out reader can't fix an empty archive, so they get the news
+      without a button that only bounces them to a sign-in screen. %>
+  <% if user_signed_in? %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "No stories yet",
+          body: "Metrics will show up here once you publish your first post.",
+          cta_label: "Write your first story",
+          cta_href: new_post_path
+        ) %>
+  <% else %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "No stories yet",
+          body: "Nothing has been published on MindCanvas yet. Check back soon."
+        ) %>
+  <% end %>
 <% else %>
-  <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+  <%# Three tiles for a reader, four for an author. Both column counts are
+      written out literally so Tailwind's scanner can see them. %>
+  <div class="mt-8 grid grid-cols-2 gap-4 <%= @draft_count ? "lg:grid-cols-4" : "lg:grid-cols-3" %>">
     <div data-reveal-item class="surface-float rounded-2xl p-5">
       <p class="text-sm text-gray-500 dark:text-gray-400">Published</p>
       <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @published_count %></p>
     </div>
-    <div data-reveal-item class="surface-float rounded-2xl p-5">
-      <p class="text-sm text-gray-500 dark:text-gray-400">Drafts</p>
-      <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @draft_count %></p>
-    </div>
+    <% if @draft_count %>
+      <div data-reveal-item class="surface-float rounded-2xl p-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Your drafts</p>
+        <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @draft_count %></p>
+      </div>
+    <% end %>
     <div data-reveal-item class="surface-float rounded-2xl p-5">
       <p class="text-sm text-gray-500 dark:text-gray-400">Total views</p>
       <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100 tabular-nums"><%= @total_views %></p>

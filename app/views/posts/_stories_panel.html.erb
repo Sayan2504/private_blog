@@ -1,0 +1,30 @@
+<%# The swappable half of My stories. target: "_top" matters: links inside a
+    frame drive that frame by default, which would have turned every post card
+    and every empty-state button into a swap of this panel instead of a page
+    navigation. Only the tab links, which name the frame explicitly, get to
+    replace it. %>
+<%= turbo_frame_tag "stories_panel", target: "_top" do %>
+  <% if posts.any? %>
+    <div data-reveal-stack class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <% posts.each do |post| %>
+        <%= render PostCardComponent.new(post: post, current_user: current_user) %>
+      <% end %>
+    </div>
+  <% elsif tab == :drafts %>
+    <%= render EmptyStateComponent.new(
+          icon: :draft,
+          title: "No drafts yet",
+          body: "Ideas you save without publishing will wait for you here.",
+          cta_label: "Start a draft",
+          cta_href: new_post_path
+        ) %>
+  <% else %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "Nothing published yet",
+          body: draft_count.to_i.positive? ? "You have work in progress — finish a draft and it will appear here." : "Everything you publish collects on this page.",
+          cta_label: draft_count.to_i.positive? ? "Open your drafts" : "Write your first story",
+          cta_href: draft_count.to_i.positive? ? mine_posts_path(tab: "drafts") : new_post_path
+        ) %>
+  <% end %>
+<% end %>

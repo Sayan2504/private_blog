@@ -60,7 +60,7 @@
          element sharing the canvas fill, the header is a transparent frame
          holding floating clusters, and flash messages float over the content
          rather than pushing it down. -->
-    <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym) %>
+    <%= render SidebarComponent.new(active: content_for(:sidebar_active)&.to_sym, user_signed_in: user_signed_in?) %>
 
     <!-- min-w-0 is required: without it this flex child refuses to shrink
          below its content's min-content width, which pushes wide grids and
@@ -69,15 +69,17 @@
     <div data-controller="chrome" class="relative flex min-h-0 min-w-0 flex-1 flex-col">
       <%= render HeaderComponent.new(user_signed_in: user_signed_in?) %>
 
-      <div class="pointer-events-none absolute inset-x-0 top-14 z-30 min-[425px]:top-[4.5rem]">
-        <div class="pointer-events-auto">
-          <% if notice.present? %>
-            <%= render FlashComponent.new(type: :notice, message: notice) %>
-          <% end %>
-          <% if alert.present? %>
-            <%= render FlashComponent.new(type: :alert, message: alert) %>
-          <% end %>
-        </div>
+      <%# Flashes stack down from the top-right corner, lining up under the
+          header cluster on the same gutter. They are toasts, not a banner:
+          nothing in the page measure is covered and nothing is pushed down,
+          so a confirmation can never land on top of a page heading. %>
+      <div class="pointer-events-none absolute inset-x-0 top-14 z-30 flex flex-col items-end gap-2 px-2 min-[425px]:top-[4.5rem] min-[425px]:px-4">
+        <% if notice.present? %>
+          <%= render FlashComponent.new(type: :notice, message: notice) %>
+        <% end %>
+        <% if alert.present? %>
+          <%= render FlashComponent.new(type: :alert, message: alert) %>
+        <% end %>
       </div>
 
       <div data-scroll-root class="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">

@@ -24,8 +24,13 @@
   </div>
 
   <div class="chrome-cluster pointer-events-auto flex shrink-0 items-center gap-1 rounded-full p-1.5 min-[425px]:gap-2 min-[425px]:px-2.5 min-[425px]:py-2">
-    <%= render ButtonComponent.new(variant: :primary, size: :sm, href: new_post_path, class: "rounded-full", icon: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>') do %>
-      <span class="hidden min-[425px]:inline">Write</span>
+    <%# Writing needs an account, so signed-out readers are not offered a
+        button whose only outcome is a redirect to the sign-in screen. Their
+        route in is Sign up, already sitting at the end of this cluster. %>
+    <% if user_signed_in %>
+      <%= render ButtonComponent.new(variant: :primary, size: :sm, href: new_post_path, class: "rounded-full", icon: '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>') do %>
+        <span class="hidden min-[425px]:inline">Write</span>
+      <% end %>
     <% end %>
 
     <button data-action="darkmode#toggle" data-darkmode-target="icon" class="icon-button cursor-pointer rounded-full text-gray-500 transition-[background-color,color,rotate,scale] duration-500 ease-spring hover:rotate-12 hover:bg-gray-100 hover:text-gray-700 active:scale-90 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-200" aria-label="Toggle theme">

@@ -1,9 +1,23 @@
 # frozen_string_literal: true
 
+# A toast, not a banner. Flashes float in the top-right corner of the content
+# pane, so a confirmation never covers a page heading and never shifts the
+# layout underneath it.
+#
+# The surface itself is neutral in both variants — the same tinted glass the
+# header clusters use — and the meaning is carried by one coloured icon. A
+# full green or red panel read as part of the page; a small mark on the app's
+# own chrome reads as the app talking back.
 class FlashComponent < ViewComponent::Base
   VARIANTS = {
-    notice: { bg: "bg-green-50 dark:bg-green-900/20", border: "border-green-200 dark:border-green-800", text: "text-green-800 dark:text-green-200" },
-    alert: { bg: "bg-red-50 dark:bg-red-900/20", border: "border-red-200 dark:border-red-800", text: "text-red-800 dark:text-red-200" }
+    notice: {
+      accent: "text-emerald-600 dark:text-emerald-400",
+      icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+    },
+    alert: {
+      accent: "text-red-600 dark:text-red-400",
+      icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m0 3.75h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
+    }
   }.freeze
 
   def initialize(type:, message:)
@@ -11,17 +25,23 @@ class FlashComponent < ViewComponent::Base
     @message = message
   end
 
-  def call
-    styles = VARIANTS[@type] || VARIANTS[:notice]
-
-    content_tag :div,
-      class: "motion-flash mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8",
-      data: { controller: "flash", action: "click->flash#dismiss" } do
-      content_tag :div, @message, class: "#{styles[:bg]} border #{styles[:border]} #{styles[:text]} px-4 py-3 rounded-lg text-sm cursor-pointer", role: "alert"
-    end
-  end
-
   def render?
     @message.present?
+  end
+
+  private
+
+  attr_reader :message
+
+  def variant
+    VARIANTS.fetch(@type, VARIANTS[:notice])
+  end
+
+  def accent_class
+    variant[:accent]
+  end
+
+  def icon_path
+    variant[:icon].html_safe
   end
 end

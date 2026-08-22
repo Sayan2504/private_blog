@@ -1,10 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Fallback only — the real duration is read back off each element.
-const REVEAL_MS = 620
+// Fallback only — the real duration is read back off each element. Kept in
+// step with the 720ms in application.css so a page with no other transition
+// declared still settles at the right moment.
+const REVEAL_MS = 720
 
 // Prose blocks reveal on a much tighter heel than page furniture.
-const FAST_STAGGER = 45
+const FAST_STAGGER = 50
 
 // Reveals [data-reveal-item] elements as they enter the scroll pane, with a
 // small stagger between items that land together. Each item is revealed once
@@ -14,7 +16,7 @@ const FAST_STAGGER = 45
 // piled on the first card's position and deal out into their own slots.
 export default class extends Controller {
   static values = {
-    stagger: { type: Number, default: 150 },
+    stagger: { type: Number, default: 170 },
     // Caps how far the cascade can run so a long list's last item is not left
     // waiting seconds. It still has to clear a full screen of furniture: at 6
     // the dashboard's trailing heading and both post cards collapsed onto one
@@ -23,47 +25,67 @@ export default class extends Controller {
   }
 
   connect() {
-    this.markProse()
-
-    this.items = Array.from(this.element.querySelectorAll("[data-reveal-item]"))
-    if (this.items.length === 0) return
-
-    // Document order, captured once. IntersectionObserver hands entries back in
+    // Document order within a batch. IntersectionObserver hands entries back in
     // whatever order it detected them, so this is what lets a batch be replayed
     // top to bottom rather than in discovery order.
-    this.order = new Map(this.items.map((item, index) => [item, index]))
-
+    this.order = new Map()
     this.timers = new Set()
+    this.frames = new Set()
+    this.reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      this.items.forEach((item) => this.settle(item))
+    // Content swapped into a turbo-frame — the tabs on My stories — arrives
+    // long after this controller collected its items. Without a second pass
+    // those elements keep the hidden start state forever, so each frame load
+    // scans its own subtree and animates just that.
+    this.onFrameLoad = (event) => this.scan(event.target)
+    this.element.addEventListener("turbo:frame-load", this.onFrameLoad)
+
+    this.scan(this.element)
+  }
+
+  scan(root) {
+    this.markProse(root)
+
+    const items = Array.from(root.querySelectorAll("[data-reveal-item]"))
+    if (items.length === 0) return
+
+    items.forEach((item, index) => this.order.set(item, index))
+
+    if (this.reduced) {
+      items.forEach((item) => this.settle(item))
       return
     }
 
-    this.stackCards()
+    this.stackCards(root)
 
     // Let the stacked state own a painted frame before anything can reveal:
     // the intersection callback otherwise fires in the same frame, and the
     // browser has no start value to animate the deal from. The cards are still
     // at opacity 0 here, so the pile itself is never visible.
-    this.frame = requestAnimationFrame(() => {
-      this.frame = requestAnimationFrame(() => this.observeItems())
+    const outer = requestAnimationFrame(() => {
+      const inner = requestAnimationFrame(() => this.observeItems(items))
+      this.frames.add(inner)
     })
+
+    this.frames.add(outer)
   }
 
-  observeItems() {
-    this.observer = new IntersectionObserver(this.reveal.bind(this), {
+  observeItems(items) {
+    // One observer for the page, shared by every batch: an item is unobserved
+    // the moment it arrives, so nothing accumulates.
+    this.observer ||= new IntersectionObserver(this.reveal.bind(this), {
       // The page body never scrolls — the content pane does.
       root: this.element.closest("[data-scroll-root]"),
       rootMargin: "0px 0px -5% 0px",
       threshold: 0.1
     })
 
-    this.items.forEach((item) => this.observer.observe(item))
+    items.forEach((item) => this.observer.observe(item))
   }
 
   disconnect() {
-    cancelAnimationFrame(this.frame)
+    this.element.removeEventListener("turbo:frame-load", this.onFrameLoad)
+    this.frames?.forEach((frame) => cancelAnimationFrame(frame))
     this.observer?.disconnect()
     this.timers?.forEach((timer) => clearTimeout(timer))
   }
@@ -71,8 +93,8 @@ export default class extends Controller {
   // Article bodies are rendered HTML, so the blocks to reveal can only be
   // found at runtime. They get a tighter stagger than the rest of the page:
   // paragraphs arriving on a delay is the fastest way to make reading annoying.
-  markProse() {
-    this.element.querySelectorAll("[data-reveal-prose]").forEach((prose) => {
+  markProse(root) {
+    root.querySelectorAll("[data-reveal-prose]").forEach((prose) => {
       // ActionText wraps the body in .trix-content, so the blocks worth
       // revealing are usually a level below the container.
       const scope = prose.querySelector(".trix-content") || prose
@@ -86,8 +108,8 @@ export default class extends Controller {
 
   // Offsets each card back onto the first card's position, so revealing it —
   // which clears the offset — deals it out to where it actually belongs.
-  stackCards() {
-    this.element.querySelectorAll("[data-reveal-stack]").forEach((grid) => {
+  stackCards(root) {
+    root.querySelectorAll("[data-reveal-stack]").forEach((grid) => {
       const cards = Array.from(grid.querySelectorAll(":scope > [data-reveal-item]"))
       if (cards.length < 2) return
 

@@ -1,9 +1,9 @@
-<%# An element on the page, not a region of it: inset from every edge so both
-    of its side rules are visible, and drawn only by that rule — the fill
-    matches the canvas behind it. It owns the brand mark and its own footer
-    chip, so the app frame has no separate footer band. Only the nav scrolls;
-    `mt-auto` on the footer holds it at the bottom of a column that is always
-    exactly as tall as the panel.
+<%# A raised surface inset from every edge, one tone lighter than the canvas
+    behind it (see .surface-panel) — no border, same idiom as every other
+    panel in the app. It owns the brand mark and its own footer chip, so the
+    app frame has no separate footer band. Only the nav scrolls; `mt-auto` on
+    the footer holds it at the bottom of a column that is always exactly as
+    tall as the panel.
 
     overflow-hidden is what keeps the nav's hover fills and scroll inside the
     12px corners instead of squaring them off. %>

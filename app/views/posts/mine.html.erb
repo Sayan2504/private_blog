@@ -1,0 +1,60 @@
+<% content_for :title, (@tab == :drafts ? "Drafts — MindCanvas" : "My stories — MindCanvas") %>
+<% content_for :sidebar_active, "mine" %>
+
+<%# Everything the signed-in user has written, in two tabs over one page.
+    Published leads because it is the finished work; drafts are the same posts
+    before they went out, so they are a filter here rather than a separate
+    destination in the sidebar.
+
+    Only the list is inside the turbo-frame. Switching tabs therefore replaces
+    the list and nothing else — the heading and the control itself are never
+    re-rendered, so nothing above the tabs re-runs its entrance animation. %>
+
+<% tabs = [
+     { key: :published, label: "Published", count: @published_count, href: mine_posts_path },
+     { key: :drafts, label: "Drafts", count: @draft_count, href: mine_posts_path(tab: "drafts") }
+   ] %>
+
+<div data-reveal-item class="flex flex-col gap-2 pb-2 sm:flex-row sm:items-end sm:justify-between">
+  <div>
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">My stories <%= @published_count + @draft_count %></p>
+    <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Everything you've written</h1>
+  </div>
+  <p class="text-sm text-gray-500 dark:text-gray-400">Published work and drafts, newest first.</p>
+</div>
+
+<%# The pill is one element that slides, rather than a background handed from
+    one link to the next: the tabs never re-render, so the only way the state
+    can move is for something to move. tabs_controller places it on connect and
+    again the instant a tab is clicked, ahead of the frame coming back. It also
+    owns the URL — deliberately not data-turbo-action, see the controller.
+
+    Without JavaScript these are plain links: the whole page navigates and the
+    active link paints its own pill (dropped again by .is-ready), so the tabs
+    work with the controller switched off. %>
+<div data-reveal-item class="mt-6">
+  <%# A nav, not a tablist: each tab is a real link with its own URL, and ARIA
+      tabs are neither links nor addressable. aria-current carries the state. %>
+  <nav
+    data-controller="tabs"
+    class="tab-track inline-flex items-center gap-1 rounded-full p-1"
+    aria-label="Filter your stories"
+  >
+    <span data-tabs-target="indicator" class="tab-indicator" aria-hidden="true"></span>
+
+    <% tabs.each do |tab| %>
+      <% active = @tab == tab[:key] %>
+      <%= link_to tab[:href],
+            class: "tab-link inline-flex h-9 items-center rounded-full px-4 text-sm font-medium",
+            data: { tabs_target: "tab", action: "tabs#select", turbo_frame: "stories_panel" },
+            "aria-current": (active ? "page" : nil) do %>
+        <span class="flex items-center gap-2">
+          <%= tab[:label] %>
+          <span class="tab-count text-xs tabular-nums"><%= tab[:count] %></span>
+        </span>
+      <% end %>
+    <% end %>
+  </nav>
+</div>
+
+<%= render "stories_panel", posts: @posts, tab: @tab, draft_count: @draft_count %>

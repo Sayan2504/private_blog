@@ -1,0 +1,14 @@
+<%# Click anywhere on the toast dismisses it; flash_controller also retires it
+    on its own after a beat. role=status keeps the announcement polite — a
+    flash is never urgent enough to interrupt a screen reader mid-sentence. %>
+<div
+  class="flash-toast motion-flash pointer-events-auto flex w-full max-w-xs cursor-pointer items-start gap-2.5 rounded-2xl px-3.5 py-3 text-sm text-gray-700 dark:text-gray-200 sm:max-w-sm"
+  role="status"
+  data-controller="flash"
+  data-action="click->flash#dismiss"
+>
+  <svg class="mt-px h-4 w-4 shrink-0 <%= accent_class %>" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+    <%= icon_path %>
+  </svg>
+  <span class="min-w-0 flex-1 leading-snug"><%= message %></span>
+</div>
