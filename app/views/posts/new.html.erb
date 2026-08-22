@@ -1,6 +1,4 @@
 <% content_for :title, "Write a new story" %>
 <% content_for :sidebar_active, "drafts" %>
 
-<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-20">
-  <%= render "form", post: @post %>
-</div>
+<%= render "form", post: @post %>

@@ -1,13 +1,13 @@
 <% content_for :title, @post.title %>
 <% content_for :sidebar_active, "dashboard" %>
 
-<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 pt-20">
+<article>
   <!-- Reading progress -->
-  <div class="sticky top-0 z-20 -mt-20 h-0.5 bg-transparent">
+  <div class="sticky top-0 z-20 -mt-20 h-0.5 bg-transparent lg:-mt-24">
     <div data-controller="progress" class="reading-progress h-full w-full rounded-full bg-gray-900 dark:bg-gray-100"></div>
   </div>
 
-  <div class="mt-16">
+  <div class="mt-20 lg:mt-24">
     <%= render PostHeaderComponent.new(post: @post, current_user: current_user) %>
   </div>
 

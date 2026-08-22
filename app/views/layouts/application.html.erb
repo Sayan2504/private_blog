@@ -72,13 +72,20 @@
             layout nothing. %>
         <div data-chrome-target="sentinel" class="h-px shrink-0"></div>
 
-        <%# [&>*]:w-full is global on purpose: a page container using
-            "max-w-* mx-auto" is a flex item here, and its auto side margins
-            cancel the default stretch, collapsing it to fit-content. Forcing
-            width:100% on direct children keeps every page — current and
-            future — at the same measure regardless of how much it contains. %>
-        <main data-controller="reveal" class="flex min-h-0 min-w-0 flex-1 flex-col [&>*]:w-full">
-          <%= yield %>
+        <main data-controller="reveal" class="flex min-h-0 min-w-0 flex-1 flex-col">
+          <%# The page measure and gutters are declared here, once. Every page
+              — current and future — lines up on the same left and right edge
+              without restating a container of its own, so a new view can be
+              written as bare content and still sit exactly where the dashboard
+              sits. The top padding is what clears the floating header.
+
+              flex-1 keeps this box as tall as the pane even when the page is
+              short, so a view that wants to centre itself vertically (the auth
+              cards) has a full-height parent to centre against. It stays
+              display:block, so page content flows normally inside it. %>
+          <div class="mx-auto w-full min-w-0 max-w-6xl flex-1 px-4 pb-10 pt-20 sm:px-6 lg:px-8 lg:pb-12 lg:pt-24">
+            <%= yield %>
+          </div>
         </main>
       </div>
     </div>

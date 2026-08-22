@@ -15,7 +15,7 @@ class FlashComponent < ViewComponent::Base
     styles = VARIANTS[@type] || VARIANTS[:notice]
 
     content_tag :div,
-      class: "motion-flash max-w-4xl mx-auto px-4 mt-4",
+      class: "motion-flash mx-auto mt-4 w-full max-w-6xl px-4 sm:px-6 lg:px-8",
       data: { controller: "flash", action: "click->flash#dismiss" } do
       content_tag :div, @message, class: "#{styles[:bg]} border #{styles[:border]} #{styles[:text]} px-4 py-3 rounded-lg text-sm cursor-pointer", role: "alert"
     end

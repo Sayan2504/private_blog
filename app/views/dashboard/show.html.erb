@@ -1,81 +1,79 @@
 <% content_for :title, "Dashboard — MindCanvas" %>
 <% content_for :sidebar_active, "dashboard" %>
 
-<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-10 pt-20 lg:pb-12 lg:pt-24">
-  <div data-reveal-item class="pb-2">
-    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Overview</p>
-    <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">MindCanvas, at a glance</h1>
+<div data-reveal-item class="pb-2">
+  <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Overview</p>
+  <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">MindCanvas, at a glance</h1>
+</div>
+
+<% if @published_count.zero? && @draft_count.zero? %>
+  <div data-reveal-item class="surface-float mt-8 rounded-3xl py-16 text-center">
+    <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
+    </svg>
+    <h3 class="text-base font-medium text-gray-900 dark:text-gray-100 mb-1">No stories yet</h3>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Metrics will show up here once you publish your first post.</p>
+    <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
+      Write your first story
+    <% end %>
+  </div>
+<% else %>
+  <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div data-reveal-item class="surface-float rounded-2xl p-5">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Published</p>
+      <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @published_count %></p>
+    </div>
+    <div data-reveal-item class="surface-float rounded-2xl p-5">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Drafts</p>
+      <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @draft_count %></p>
+    </div>
+    <div data-reveal-item class="surface-float rounded-2xl p-5">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Total views</p>
+      <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100 tabular-nums"><%= @total_views %></p>
+    </div>
+    <div data-reveal-item class="surface-float rounded-2xl p-5">
+      <p class="text-sm text-gray-500 dark:text-gray-400">Avg. reading time</p>
+      <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @avg_reading_time %> <span class="text-lg font-medium text-gray-400 dark:text-gray-500">min</span></p>
+    </div>
   </div>
 
-  <% if @published_count.zero? && @draft_count.zero? %>
-    <div data-reveal-item class="surface-float mt-8 rounded-3xl py-16 text-center">
-      <svg class="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/>
-      </svg>
-      <h3 class="text-base font-medium text-gray-900 dark:text-gray-100 mb-1">No stories yet</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Metrics will show up here once you publish your first post.</p>
-      <%= render ButtonComponent.new(variant: :primary, size: :md, href: new_post_path) do %>
-        Write your first story
-      <% end %>
-    </div>
-  <% else %>
-    <div class="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-      <div data-reveal-item class="surface-float rounded-2xl p-5">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Published</p>
-        <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @published_count %></p>
-      </div>
-      <div data-reveal-item class="surface-float rounded-2xl p-5">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Drafts</p>
-        <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @draft_count %></p>
-      </div>
-      <div data-reveal-item class="surface-float rounded-2xl p-5">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Total views</p>
-        <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100 tabular-nums"><%= @total_views %></p>
-      </div>
-      <div data-reveal-item class="surface-float rounded-2xl p-5">
-        <p class="text-sm text-gray-500 dark:text-gray-400">Avg. reading time</p>
-        <p class="mt-2 text-3xl font-semibold text-gray-900 dark:text-gray-100"><%= @avg_reading_time %> <span class="text-lg font-medium text-gray-400 dark:text-gray-500">min</span></p>
+  <section data-reveal-item class="surface-float mt-10 rounded-3xl p-6">
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Trending</p>
+    <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Most-read stories</h2>
+
+    <% if @trending_posts.any? %>
+      <ol class="mt-5 divide-y divide-gray-100 dark:divide-gray-800">
+        <% @trending_posts.each_with_index do |post, index| %>
+          <!-- minmax(0,1fr) on the title column is what lets a long title
+               truncate instead of widening the whole page. -->
+          <li class="grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-4 py-3">
+            <span class="text-sm font-medium text-gray-400 dark:text-gray-500 tabular-nums"><%= index + 1 %></span>
+            <%= link_to post.title, post_path(post), class: "truncate text-sm font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+            <span class="text-sm text-gray-500 dark:text-gray-400 tabular-nums"><%= post.views_count %> views</span>
+          </li>
+        <% end %>
+      </ol>
+    <% else %>
+      <p class="mt-5 text-sm text-gray-500 dark:text-gray-400">No views yet — once readers visit published stories, the most-read ones will show up here.</p>
+    <% end %>
+  </section>
+
+  <section class="mt-10">
+    <div data-reveal-item class="flex flex-col gap-2 pb-2 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">All stories <%= @posts.size %></p>
+        <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Everything published on MindCanvas</h2>
       </div>
     </div>
 
-    <section data-reveal-item class="surface-float mt-10 rounded-3xl p-6">
-      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Trending</p>
-      <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Most-read stories</h2>
-
-      <% if @trending_posts.any? %>
-        <ol class="mt-5 divide-y divide-gray-100 dark:divide-gray-800">
-          <% @trending_posts.each_with_index do |post, index| %>
-            <!-- minmax(0,1fr) on the title column is what lets a long title
-                 truncate instead of widening the whole page. -->
-            <li class="grid grid-cols-[1.25rem_minmax(0,1fr)_auto] items-center gap-4 py-3">
-              <span class="text-sm font-medium text-gray-400 dark:text-gray-500 tabular-nums"><%= index + 1 %></span>
-              <%= link_to post.title, post_path(post), class: "truncate text-sm font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
-              <span class="text-sm text-gray-500 dark:text-gray-400 tabular-nums"><%= post.views_count %> views</span>
-            </li>
-          <% end %>
-        </ol>
-      <% else %>
-        <p class="mt-5 text-sm text-gray-500 dark:text-gray-400">No views yet — once readers visit published stories, the most-read ones will show up here.</p>
-      <% end %>
-    </section>
-
-    <section class="mt-10">
-      <div data-reveal-item class="flex flex-col gap-2 pb-2 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">All stories <%= @posts.size %></p>
-          <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Everything published on MindCanvas</h2>
-        </div>
+    <% if @posts.any? %>
+      <div data-reveal-stack class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <% @posts.each do |post| %>
+          <%= render PostCardComponent.new(post: post, current_user: current_user) %>
+        <% end %>
       </div>
-
-      <% if @posts.any? %>
-        <div data-reveal-stack class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          <% @posts.each do |post| %>
-            <%= render PostCardComponent.new(post: post, current_user: current_user) %>
-          <% end %>
-        </div>
-      <% else %>
-        <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">No published stories yet.</p>
-      <% end %>
-    </section>
-  <% end %>
-</div>
+    <% else %>
+      <p class="mt-6 text-sm text-gray-500 dark:text-gray-400">No published stories yet.</p>
+    <% end %>
+  </section>
+<% end %>
