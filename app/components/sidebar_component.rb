@@ -29,6 +29,7 @@ class SidebarComponent < ViewComponent::Base
 
     if user_signed_in
       items << NavItem.new(label: "My stories", href: mine_posts_path, icon: :mine, active: @active == :mine)
+      items << NavItem.new(label: "My account", href: account_path, icon: :account, active: @active == :account)
     end
 
     items << NavItem.new(label: "About", href: about_path, icon: :about, active: @active == :about)
@@ -43,6 +44,8 @@ class SidebarComponent < ViewComponent::Base
       '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 21c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M3.6 9h16.8M3.6 15h16.8M12 3a14.5 14.5 0 010 18M12 3a14.5 14.5 0 000 18"/></svg>'
     when :mine
       '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M6.75 3.75h10.5a1.5 1.5 0 011.5 1.5v15l-6.75-3.75L5.25 20.25v-15a1.5 1.5 0 011.5-1.5z"/></svg>'
+    when :account
+      '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2.75" y="4.75" width="18.5" height="14.5" rx="2.25" stroke-width="1.75"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8.25 10.5a1.5 1.5 0 103 0 1.5 1.5 0 00-3 0zM6.75 16.25c.4-1.4 1.6-2.25 3-2.25s2.6.85 3 2.25M14.75 10h3.5M14.75 13h3.5"/></svg>'
     when :about
       '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.5 20.25a7.5 7.5 0 0115 0"/></svg>'
     end.html_safe

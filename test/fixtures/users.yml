@@ -1,9 +1,20 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+# `one` carries a full profile and `two` carries only what sign-up requires, so
+# the account page is exercised both with the optional fields filled in and
+# with them blank.
+
 one:
   email: user@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  name: Ada Lovelace
+  address: |-
+    12 Analytical Engine Lane
+    Kolkata, India
+  mobile_number: "+91 98765 43210"
+  interests: "{fiction,distributed systems,cycling}"
 
 two:
   email: other@example.com
   encrypted_password: <%= Devise::Encryptor.digest(User, 'password123') %>
+  name: Grace Hopper

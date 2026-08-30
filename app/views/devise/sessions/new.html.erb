@@ -9,13 +9,13 @@
     <%= form_for(resource, as: resource_name, url: session_path(resource_name), local: true) do |f| %>
       <div class="space-y-5">
         <div>
-          <%= f.label :email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+          <%= f.label :email, class: auth_label_classes %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: auth_field_classes %>
         </div>
 
         <div>
-          <%= f.label :password, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <%= f.password_field :password, autocomplete: "current-password", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+          <%= f.label :password, class: auth_label_classes %>
+          <%= f.password_field :password, autocomplete: "current-password", class: auth_field_classes %>
         </div>
 
         <% if devise_mapping.rememberable? %>

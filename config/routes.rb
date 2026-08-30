@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: { registrations: "users/registrations" }
 
   resource :dashboard, only: :show, controller: "dashboard"
   resource :about, only: :show, controller: "about"
+
+  # Singular: you only ever look at your own. Editing lives on Devise's
+  # registration form at /users/edit, which this page links to.
+  resource :account, only: :show, controller: "accounts"
 
   resources :posts, except: [ :index ] do
     collection do

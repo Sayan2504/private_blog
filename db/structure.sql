@@ -215,7 +215,11 @@ CREATE TABLE public.users (
     reset_password_sent_at timestamp(6) without time zone,
     remember_created_at timestamp(6) without time zone,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    name character varying,
+    address text,
+    mobile_number character varying,
+    interests character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
 
 
@@ -438,6 +442,7 @@ ALTER TABLE ONLY public.active_storage_attachments
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260830120000'),
 ('20260815150000'),
 ('20260815143000'),
 ('20260815140000'),

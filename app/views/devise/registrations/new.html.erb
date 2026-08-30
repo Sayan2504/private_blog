@@ -1,5 +1,16 @@
+<% content_for :title, "Create your account — MindCanvas" %>
+
+<%# Sign-up now collects the profile as well as the credentials, so everything
+    the account page shows is captured once, here, rather than left for a
+    settings screen the reader may never open.
+
+    Only name and the credentials are required. Address, mobile and interests
+    are asked for but optional on purpose: they are not things someone should
+    have to hand over to write a post, and nothing in the app breaks when they
+    are blank. The optional ones say so, so nobody stalls guessing. %>
+
 <div class="flex min-h-full items-center justify-center">
-  <div data-reveal-item data-reveal-scale class="surface-float w-full max-w-md rounded-3xl p-8">
+  <div data-reveal-item data-reveal-scale class="surface-float w-full max-w-lg rounded-3xl p-8">
     <div class="space-y-2 mb-8">
       <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Get started</p>
       <h1 class="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Create your account</h1>
@@ -10,26 +21,55 @@
       <%= render "devise/shared/error_messages", resource: resource %>
 
       <div class="space-y-5">
-        <div>
-          <%= f.label :email, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= f.label :name, class: auth_label_classes %>
+            <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "Sayan Sinha", class: auth_field_classes %>
+          </div>
+
+          <div>
+            <%= f.label :mobile_number, class: auth_label_classes do %>
+              Mobile number <%= optional_marker %>
+            <% end %>
+            <%= f.telephone_field :mobile_number, autocomplete: "tel", placeholder: "+91 98765 43210", class: auth_field_classes %>
+          </div>
         </div>
 
         <div>
-          <%= f.label :password, class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% if @minimum_password_length %>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1.5"><%= @minimum_password_length %> characters minimum</p>
+          <%= f.label :address, class: auth_label_classes do %>
+            Address <%= optional_marker %>
           <% end %>
-          <%= f.password_field :password, autocomplete: "new-password", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+          <%= f.text_area :address, rows: 2, autocomplete: "street-address", placeholder: "Kolkata, India", class: auth_field_classes %>
         </div>
 
         <div>
-          <%= f.label :password_confirmation, "Confirm password", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 px-4 py-2.5 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-gray-900 dark:focus:border-gray-100 transition-colors" %>
+          <%= f.label :interests, class: auth_label_classes do %>
+            Interests <%= optional_marker %>
+          <% end %>
+          <p class="<%= auth_hint_classes %>">Separate them with commas</p>
+          <%= f.text_field :interests, value: resource.interests_text, placeholder: "Fiction, distributed systems, cycling", class: auth_field_classes %>
+        </div>
+
+        <div>
+          <%= f.label :email, class: auth_label_classes %>
+          <%= f.email_field :email, autocomplete: "email", class: auth_field_classes %>
+        </div>
+
+        <div>
+          <%= f.label :password, class: auth_label_classes %>
+          <% if @minimum_password_length %>
+            <p class="<%= auth_hint_classes %>"><%= @minimum_password_length %> characters minimum</p>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", class: auth_field_classes %>
+        </div>
+
+        <div>
+          <%= f.label :password_confirmation, "Confirm password", class: auth_label_classes %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: auth_field_classes %>
         </div>
 
         <div class="pt-2">
-          <%= f.submit "Create account", class: "w-full rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white hover:bg-gray-700 transition-colors dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300" %>
+          <%= f.submit "Create account", class: "w-full cursor-pointer rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white hover:bg-gray-700 transition-colors dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300" %>
         </div>
       </div>
     <% end %>
