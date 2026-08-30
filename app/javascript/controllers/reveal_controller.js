@@ -5,8 +5,18 @@ import { Controller } from "@hotwired/stimulus"
 // declared still settles at the right moment.
 const REVEAL_MS = 720
 
-// Prose blocks reveal on a much tighter heel than page furniture.
-const FAST_STAGGER = 50
+// Per-variant stagger, in the order they are checked. Anything without one of
+// these markers falls back to the controller's own `stagger` value.
+//
+//   wave — auth card contents. Tight enough that the items read as a single
+//          thing arriving with a leading edge, rather than a queue. At the
+//          50ms prose step the same card looked like a page still loading,
+//          one field appearing after another.
+//   fast — prose blocks, which need to stay ahead of the reader.
+const STAGGER_STEPS = {
+  revealWave: 24,
+  revealFast: 50
+}
 
 // Reveals [data-reveal-item] elements as they enter the scroll pane, with a
 // small stagger between items that land together. Each item is revealed once
@@ -146,8 +156,7 @@ export default class extends Controller {
       .sort((a, b) => this.order.get(a.target) - this.order.get(b.target))
       .forEach((entry, index) => {
         const item = entry.target
-        const step = "revealFast" in item.dataset ? FAST_STAGGER : this.staggerValue
-        const delay = Math.min(index, this.maxStaggerValue) * step
+        const delay = Math.min(index, this.maxStaggerValue) * this.stepFor(item)
 
         item.style.transitionDelay = `${delay}ms`
 
@@ -167,6 +176,12 @@ export default class extends Controller {
         const timer = setTimeout(() => this.settle(item), delay + this.durationOf(item) + 60)
         this.timers.add(timer)
       })
+  }
+
+  stepFor(item) {
+    const marker = Object.keys(STAGGER_STEPS).find((key) => key in item.dataset)
+
+    return marker ? STAGGER_STEPS[marker] : this.staggerValue
   }
 
   durationOf(item) {

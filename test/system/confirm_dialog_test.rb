@@ -44,11 +44,29 @@ class ConfirmDialogTest < ApplicationSystemTestCase
 
   # Focus must not start on the destructive button, or Enter becomes a
   # shortcut for deleting something.
-  test "focus opens on Cancel, not on the action being confirmed" do
+  test "a destructive dialog opens with focus on Cancel" do
     visit post_url(@post)
     click_on "Delete"
 
     assert_equal "Cancel", page.evaluate_script("document.activeElement.textContent.trim()")
+  end
+
+  # The other half of that rule: for an action you can undo, the button you
+  # came to press is the default, so Enter carries it out.
+  test "an ordinary dialog opens with focus on the confirming action" do
+    visit edit_post_url(@post)
+    click_on "Unpublish"
+
+    assert_equal "Unpublish", page.evaluate_script("document.activeElement.textContent.trim()")
+  end
+
+  test "enter confirms an ordinary action without reaching for the mouse" do
+    visit edit_post_url(@post)
+    click_on "Unpublish"
+    page.send_keys :enter
+
+    assert_text "Story moved back to drafts"
+    assert_not_predicate @post.reload, :published?
   end
 
   # The dialog agrees with the button that opened it: a reversible action does

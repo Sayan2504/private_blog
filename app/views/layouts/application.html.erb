@@ -49,6 +49,13 @@
   </head>
 
   <body class="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased transition-colors duration-300" data-controller="sidebar" data-action="turbo:visit@window->sidebar#close keydown.esc->sidebar#dismiss">
+    <%# First thing in the tab order on every page. The sidebar is a nav
+        landmark sitting before the content everywhere, so without this a
+        keyboard user walks the entire navigation before reaching the page. %>
+    <a href="#main-content" class="skip-link surface-float rounded-full px-4 py-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+      Skip to content
+    </a>
+
     <%# One dialog for the whole app — Turbo funnels every `data-turbo-confirm`
         through it (see confirm_controller.js), so destructive buttons do not
         each carry their own. A direct child of <body>, outside the main
@@ -94,7 +101,7 @@
             layout nothing. %>
         <div data-chrome-target="sentinel" class="h-px shrink-0"></div>
 
-        <main data-controller="reveal" class="flex min-h-0 min-w-0 flex-1 flex-col">
+        <main id="main-content" tabindex="-1" data-controller="reveal" class="flex min-h-0 min-w-0 flex-1 flex-col">
           <%# The page measure and gutters are declared here, once. Every page
               — current and future — lines up on the same left and right edge
               without restating a container of its own, so a new view can be

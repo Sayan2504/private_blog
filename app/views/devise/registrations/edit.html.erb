@@ -94,7 +94,7 @@
       <%= render ButtonComponent.new(variant: :ghost, size: :md, href: account_path) do %>
         Cancel
       <% end %>
-      <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit") do %>
+      <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit", submits_with: "Saving…") do %>
         Save changes
       <% end %>
     </div>

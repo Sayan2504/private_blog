@@ -32,7 +32,12 @@
           label have to travel as one element, or they animate on two different
           clocks and the text colour visibly lags the background sliding out
           from under it. %>
-      <%= link_to item.href, class: "relative flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-[background-color,color,translate] duration-300 ease-soft #{item.active ? 'nav-active text-white dark:text-gray-900' : 'text-gray-500 hover:translate-x-0.5 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'}" do %>
+      <%# The active entry was signalled by colour alone. aria-current is what
+          says "you are here" to a screen reader, and it is the same attribute
+          the segmented tabs already use for their state. %>
+      <%= link_to item.href,
+            "aria-current": (item.active ? "page" : nil),
+            class: "relative flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition-[background-color,color,translate] duration-300 ease-soft #{item.active ? 'nav-active text-white dark:text-gray-900' : 'text-gray-500 hover:translate-x-0.5 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-100'}" do %>
         <% if item.active %>
           <span class="absolute inset-0 rounded-xl bg-gray-900 dark:bg-gray-100"></span>
         <% end %>

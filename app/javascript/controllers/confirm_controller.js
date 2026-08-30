@@ -111,10 +111,14 @@ export default class extends Controller {
 
     this.element.showModal()
 
-    // Focus starts on Cancel, not on the destructive button: showModal would
-    // otherwise land on whatever comes first in the DOM, and Enter should
-    // never be the shortcut for deleting something.
-    this.cancelTarget.focus()
+    // Where focus lands depends on what is being confirmed. For an ordinary
+    // action the confirm button is the default — you opened the dialog to go
+    // ahead, and Enter should do that. For a destructive one it stays on
+    // Cancel: Enter must never be the shortcut for deleting something you
+    // cannot get back.
+    const primary = this.acceptTargets.find((button) => button.style.display !== "none")
+    const target = variant === "danger" || !primary ? this.cancelTarget : primary
+    target.focus()
 
     return new Promise((resolve) => {
       this.resolve = resolve

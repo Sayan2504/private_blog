@@ -25,7 +25,11 @@
 
   <!-- Author -->
   <div>
+    <%# Prefilled from the account rather than left blank on every new post.
+        It stays editable — a post can be written under another byline — but
+        the common case no longer means retyping your own name each time. %>
     <%= form.text_field :author,
+      value: post.author.presence || current_user&.name,
       placeholder: "Author name",
       class: "w-full text-sm text-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-gray-600 border-0 p-0 bg-transparent field-writing" %>
   </div>
@@ -35,7 +39,7 @@
 
   <!-- Content (Rich Text) -->
   <div>
-    <%= form.rich_textarea :content, class: "w-full min-h-[400px] prose prose-lg max-w-none" %>
+    <%= form.rich_textarea :content, class: "w-full min-h-[400px] prose max-w-none" %>
   </div>
 
   <!-- Actions -->
@@ -56,20 +60,21 @@
           <%= render ButtonComponent.new(
                 variant: :secondary, size: :md, type: "submit",
                 name: "unpublish", value: "true",
+                submits_with: "Unpublishing…",
                 confirm: "It will disappear from All stories until you publish it again. Nothing you have written is lost.",
                 confirm_title: "Move this story back to drafts?",
                 confirm_label: "Unpublish"
               ) do %>
             Unpublish
           <% end %>
-          <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit") do %>
+          <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit", submits_with: "Saving…") do %>
             Save changes
           <% end %>
         <% else %>
-          <%= render ButtonComponent.new(variant: :secondary, size: :md, type: "submit") do %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :md, type: "submit", submits_with: "Saving…") do %>
             Save draft
           <% end %>
-          <%= render ButtonComponent.new(variant: :success, size: :md, type: "submit", name: "publish", value: "true") do %>
+          <%= render ButtonComponent.new(variant: :success, size: :md, type: "submit", name: "publish", value: "true", submits_with: "Publishing…") do %>
             Publish
           <% end %>
         <% end %>

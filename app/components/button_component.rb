@@ -24,7 +24,7 @@ class ButtonComponent < ViewComponent::Base
   }.freeze
 
   def initialize(variant: :primary, size: :md, href: nil, method: nil, icon: nil, confirm: nil,
-                 confirm_title: nil, confirm_label: nil, type: "button", **options)
+                 confirm_title: nil, confirm_label: nil, submits_with: nil, type: "button", **options)
     @variant = variant
     @size = size
     @href = href
@@ -33,6 +33,7 @@ class ButtonComponent < ViewComponent::Base
     @confirm = confirm
     @confirm_title = confirm_title
     @confirm_label = confirm_label
+    @submits_with = submits_with
     @type = type
     @options = options
   end
@@ -49,24 +50,38 @@ class ButtonComponent < ViewComponent::Base
 
   private
 
+  # `disabled:` covers more than a permanently-off button: Turbo disables the
+  # submitter for the length of a form submission, so this is also what a
+  # button in flight looks like. Without it a submitting button was
+  # indistinguishable from an idle one, and the only feedback that anything
+  # had happened was the page eventually changing.
+  DISABLED_CLASSES = "disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100"
+
   def base_classes
-    "inline-flex shrink-0 items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer transition-[color,background-color,border-color,box-shadow,scale] duration-300 ease-soft active:scale-[0.97] #{VARIANTS[@variant]} #{SIZES[@size]} #{@options[:class]}"
+    [
+      "inline-flex shrink-0 items-center justify-center gap-1.5 font-medium rounded-md cursor-pointer",
+      "transition-[color,background-color,border-color,box-shadow,scale] duration-300 ease-soft active:scale-[0.97]",
+      DISABLED_CLASSES,
+      VARIANTS[@variant],
+      SIZES[@size],
+      @options[:class]
+    ].compact.join(" ")
   end
 
   def link_button
-    link_to @href, class: base_classes, method: @method, data: confirm_data, **html_options do
+    link_to @href, class: base_classes, method: @method, data: button_data, **html_options do
       button_content
     end
   end
 
   def button_to_link
-    button_to @href, method: @method, class: base_classes, data: confirm_data, form: { class: "inline-flex" }, **html_options do
+    button_to @href, method: @method, class: base_classes, data: button_data, form: { class: "inline-flex" }, **html_options do
       button_content
     end
   end
 
   def tag_button
-    content_tag :button, type: @type, class: base_classes, name: @options[:name], value: @options[:value], data: confirm_data, **html_options do
+    content_tag :button, type: @type, class: base_classes, name: @options[:name], value: @options[:value], data: button_data, **html_options do
       button_content
     end
   end
@@ -102,6 +117,15 @@ class ButtonComponent < ViewComponent::Base
     # button that opened it.
     merged[:turbo_confirm_variant] = destructive? ? "danger" : "primary"
     merged
+  end
+
+  # Turbo swaps the label for this while the form is in flight and disables the
+  # button, so a submit can neither be fired twice nor look like it was
+  # ignored. Merged alongside the confirm keys because both live on `data`.
+  def button_data
+    data = confirm_data
+    data[:turbo_submits_with] = @submits_with if @submits_with
+    data
   end
 
   def destructive?

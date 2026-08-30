@@ -413,6 +413,17 @@ trix-toolbar .trix-button--dialog {
     transform: none;
   }
 
+  /* Stated separately because it has to outrank the frame variant's own
+     offset, which is declared later in this file and with more specificity.
+     reveal_controller settles every item immediately under reduced motion, so
+     this only covers the moment before it connects — but that moment would
+     otherwise show the card sitting 16px out of place. */
+  .js [data-reveal-item][data-reveal-frame],
+  .js [data-reveal-item][data-reveal-wave] {
+    opacity: 1;
+    transform: none;
+  }
+
   *,
   *::before,
   *::after {
@@ -509,9 +520,47 @@ trix-toolbar .trix-button--dialog {
     transform 380ms var(--ease-soft);
 }
 
-/* Auth cards settle in rather than slide. */
-.js [data-reveal-item][data-reveal-scale] {
-  transform: translateY(10px) scale(0.985);
+/* --- Auth card entrance --------------------------------------------------
+   The card falls in from above and settles. Nothing else.
+
+   Two earlier versions were rejected, and both failed the same way — by doing
+   too much. The first faded each row in sequence down the card, which read as
+   a page still loading rather than an entrance. The second answered that with
+   a perspective tilt, a scale and a spring: three properties changing at once
+   on a curve that overshoots its resting value (--ease-spring ends at 1.4),
+   which lands as a snap rather than a settle.
+
+   So: one property, one direction, one curve. --ease-soft decelerates the
+   whole way in and never passes its target, which is what "settling" actually
+   is. Anything added here — a rotation, a scale, an overshoot — puts the
+   jerk back. */
+.js [data-reveal-item][data-reveal-frame] {
+  opacity: 1;
+  transform: translateY(-34px);
+}
+
+.js [data-reveal-item][data-reveal-frame].is-revealed {
+  transition: transform 700ms var(--ease-soft);
+}
+
+/* The contents come from the same direction as the card that carries them, a
+   much shorter distance, on a tight enough step to read as one movement with
+   a leading edge rather than a list arriving row by row.
+
+   The card never fades, deliberately: a child going 0 to 1 inside a parent
+   doing the same multiplies the two, and the contents crawl up through a
+   muddy half-opacity. Frame carries the travel, contents carry the fade. */
+.js [data-reveal-item][data-reveal-wave] {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.js [data-reveal-item][data-reveal-wave].is-revealed {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 460ms var(--ease-soft),
+    transform 460ms var(--ease-soft);
 }
 
 /* Reading progress. Scroll-driven where supported, so it rides the compositor
@@ -1032,14 +1081,18 @@ trix-toolbar .trix-button--dialog {
 
    The ring is the same near-black/near-white the active nav pill and the
    primary button use, at a 2px offset so it clears a filled control and
-   reads against the surface behind it instead of blending into the fill. */
+   reads against the surface behind it instead of blending into the fill.
+
+   `tabindex="-1"` is excluded deliberately. It means "focusable only from
+   script" — a skip-link landing point such as <main>, not a control anyone
+   can tab to — and ringing one draws a 2px box around the entire page. */
 @layer base {
-  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  :where(a, button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
     outline: 2px solid #111827;
     outline-offset: 2px;
   }
 
-  .dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  .dark :where(a, button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])):focus-visible {
     outline-color: #f9fafb;
   }
 }
@@ -1160,4 +1213,63 @@ trix-toolbar .trix-button--dialog {
   to {
     opacity: 0;
   }
+}
+
+
+/* --- Chrome polish -------------------------------------------------------
+   The details that are only noticed when they are wrong: the navigation
+   progress bar, the selection colour, the scrollbar. All three ship with a
+   browser default that belongs to no particular design, and all three appear
+   on every page. */
+
+/* Turbo paints this across the top during a navigation, and it ships bright
+   blue — the one saturated colour in an otherwise monochrome app, on the one
+   element guaranteed to appear on every page transition. */
+.turbo-progress-bar {
+  height: 2px;
+  background-color: #111827;
+}
+
+.dark .turbo-progress-bar {
+  background-color: #f9fafb;
+}
+
+::selection {
+  background-color: rgb(17 24 39 / 0.12);
+}
+
+.dark ::selection {
+  background-color: rgb(249 250 251 / 0.22);
+}
+
+/* The content pane is the only thing that scrolls (the app shell is
+   h-screen/overflow-hidden), so its scrollbar sits permanently against the
+   page. Thin and tonal rather than the OS default slab. */
+@supports (scrollbar-width: thin) {
+  [data-scroll-root] {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(17 24 39 / 0.18) transparent;
+  }
+
+  .dark [data-scroll-root] {
+    scrollbar-color: rgb(249 250 251 / 0.22) transparent;
+  }
+}
+
+/* --- Skip link -----------------------------------------------------------
+   The sidebar puts a nav landmark before the content on every single page, so
+   without this a keyboard user tabs the whole thing before reaching what they
+   came for. Off-screen until focused, then it lands as a normal floating
+   surface in the top-left gutter. */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  transform: translateY(calc(-100% - 1rem));
+  transition: transform 220ms var(--ease-soft);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
