@@ -50,11 +50,20 @@ class PostsController < ApplicationController
     end
   end
 
+  # Three outcomes share this action, decided by which submit button was used:
+  # save in place, publish a draft, or pull a published story back to drafts.
+  # Until now only the first two existed — the editor's "Save Draft" button
+  # was a plain submit, so pressing it on an already-published post saved the
+  # edit and left it published, which is the opposite of what it said.
   def update
     @post.published_at = Time.current if params[:publish] && !@post.published?
 
+    unpublishing = params[:unpublish].present? && @post.published?
+    @post.published_at = nil if unpublishing
+
     if @post.update(post_params)
-      redirect_to @post, notice: "Post was successfully updated.", status: :see_other
+      notice = unpublishing ? "Story moved back to drafts." : "Post was successfully updated."
+      redirect_to @post, notice: notice, status: :see_other
     else
       render :edit, status: :unprocessable_content
     end

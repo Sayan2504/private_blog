@@ -9,12 +9,21 @@
 # full green or red panel read as part of the page; a small mark on the app's
 # own chrome reads as the app talking back.
 class FlashComponent < ViewComponent::Base
+  # A notice is a receipt for something you just did — it can retire itself.
+  # An alert is the app telling you something went wrong, and a message that
+  # removes itself after five seconds is a message the reader may never have
+  # finished reading. Alerts stay until they are dismissed, and announce
+  # themselves assertively rather than politely.
   VARIANTS = {
     notice: {
+      role: "status",
+      auto_dismiss: true,
       accent: "text-emerald-600 dark:text-emerald-400",
       icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
     },
     alert: {
+      role: "alert",
+      auto_dismiss: false,
       accent: "text-red-600 dark:text-red-400",
       icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m0 3.75h.008M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>'
     }
@@ -39,6 +48,14 @@ class FlashComponent < ViewComponent::Base
 
   def accent_class
     variant[:accent]
+  end
+
+  def role
+    variant[:role]
+  end
+
+  def auto_dismiss?
+    variant[:auto_dismiss]
   end
 
   def icon_path

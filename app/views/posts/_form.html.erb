@@ -19,7 +19,7 @@
   <div>
     <%= form.text_field :title,
       placeholder: "Title",
-      class: "w-full text-2xl font-bold text-gray-900 dark:text-gray-100 placeholder-gray-300 dark:placeholder-gray-600 border-0 focus:ring-0 focus:outline-none p-0 bg-transparent",
+      class: "w-full text-2xl font-bold text-gray-900 dark:text-gray-100 placeholder-gray-300 dark:placeholder-gray-600 border-0 p-0 bg-transparent field-writing",
       autofocus: true %>
   </div>
 
@@ -27,7 +27,7 @@
   <div>
     <%= form.text_field :author,
       placeholder: "Author name",
-      class: "w-full text-sm text-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-gray-600 border-0 focus:ring-0 focus:outline-none p-0 bg-transparent" %>
+      class: "w-full text-sm text-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-gray-600 border-0 p-0 bg-transparent field-writing" %>
   </div>
 
   <!-- Divider -->
@@ -44,12 +44,32 @@
       <%= render ButtonComponent.new(variant: :ghost, size: :md, href: mine_posts_path) do %>
         Cancel
       <% end %>
+
+      <%# The pair of actions depends on where the post already is. A draft can
+          be saved or sent out; a published story can be edited in place or
+          pulled back. The old form showed "Save Draft" on both, which on a
+          published post saved the edit and quietly left it published — a
+          button that named an outcome it did not produce, and the only route
+          back to draft, which did not exist at all. %>
       <div class="flex items-center space-x-3">
-        <%= render ButtonComponent.new(variant: :secondary, size: :md, type: "submit") do %>
-          Save Draft
-        <% end %>
-        <%= render ButtonComponent.new(variant: :success, size: :md, type: "submit", name: "publish", value: "true") do %>
-          Publish
+        <% if post.published? %>
+          <%= render ButtonComponent.new(
+                variant: :secondary, size: :md, type: "submit",
+                name: "unpublish", value: "true",
+                confirm: "Move this story back to drafts? It will disappear from All stories until you publish it again."
+              ) do %>
+            Unpublish
+          <% end %>
+          <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit") do %>
+            Save changes
+          <% end %>
+        <% else %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :md, type: "submit") do %>
+            Save draft
+          <% end %>
+          <%= render ButtonComponent.new(variant: :success, size: :md, type: "submit", name: "publish", value: "true") do %>
+            Publish
+          <% end %>
         <% end %>
       </div>
     </div>

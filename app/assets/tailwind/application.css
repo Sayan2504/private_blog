@@ -1013,3 +1013,53 @@ trix-toolbar .trix-button--dialog {
 [data-controller="counter"].is-counting {
   transform: scale(1.4);
 }
+
+
+/* --- Keyboard focus ------------------------------------------------------
+   One ring for every interactive element in the app, declared once here
+   rather than per component. Before this, nothing in MindCanvas drew a focus
+   indicator at all: the two editor fields and every Devise input actively
+   removed the browser default with `focus:outline-none`, and ButtonComponent
+   never had one, so a keyboard user had no way to tell where they were.
+
+   `:where()` contributes zero specificity, so this is a floor, not a
+   ceiling — any element can still opt out with a plain `outline-*` utility
+   (utilities beat base regardless of specificity), and none currently do.
+
+   :focus-visible rather than :focus, so a mouse click on a button never
+   paints a ring; the browser still shows one for text fields on click,
+   which is the behaviour a caret alone can't replace.
+
+   The ring is the same near-black/near-white the active nav pill and the
+   primary button use, at a 2px offset so it clears a filled control and
+   reads against the surface behind it instead of blending into the fill. */
+@layer base {
+  :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline: 2px solid #111827;
+    outline-offset: 2px;
+  }
+
+  .dark :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+    outline-color: #f9fafb;
+  }
+}
+
+/* The editor's title and author fields are deliberately not drawn as form
+   controls — they are the page you are writing on. A 2px box around them
+   (and the title is autofocused, so it would be there the moment the editor
+   opens) reads as a form appearing around the writing surface.
+
+   They get the indicator as a rule under the field instead: same weight and
+   same colour as the ring, high contrast against the canvas, and the same
+   shape as the divider already sitting between these fields and the body.
+   Declared in `components` so it beats the base ring above. */
+@layer components {
+  .field-writing:focus-visible {
+    outline: none;
+    box-shadow: 0 2px 0 0 #111827;
+  }
+
+  .dark .field-writing:focus-visible {
+    box-shadow: 0 2px 0 0 #f9fafb;
+  }
+}

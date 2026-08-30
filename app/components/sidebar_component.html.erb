@@ -8,6 +8,7 @@
     overflow-hidden is what keeps the nav's hover fills and scroll inside the
     12px corners instead of squaring them off. %>
 <aside
+  id="sidebar-panel"
   data-sidebar-target="panel"
   class="surface-panel fixed inset-y-3 left-3 z-[60] flex w-72 -translate-x-full flex-col overflow-hidden shadow-2xl transition-transform duration-500 ease-soft md:static md:z-30 md:m-3 md:w-64 md:translate-x-0 md:shrink-0 md:shadow-none"
 >
@@ -19,7 +20,7 @@
       <span class="truncate text-base font-bold tracking-tight text-gray-900 dark:text-gray-100">MindCanvas</span>
     <% end %>
 
-    <button data-action="sidebar#close" class="icon-button rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300 md:hidden" aria-label="Close menu">
+    <button data-sidebar-target="close" data-action="sidebar#dismiss" class="icon-button rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 dark:text-gray-500 dark:hover:bg-gray-800 dark:hover:text-gray-300 md:hidden" aria-label="Close menu">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
     </button>
   </div>

@@ -1,5 +1,8 @@
 <% content_for :title, @post.title %>
-<% content_for :sidebar_active, "dashboard" %>
+<%# Reading a story lit up Dashboard, which is neither where you came from nor
+    where you are. A published post belongs to the public archive; your own
+    draft belongs to My stories, which is the only place it is listed. %>
+<% content_for :sidebar_active, (@post.published? ? "published" : "mine") %>
 
 <article>
   <!-- Reading progress -->

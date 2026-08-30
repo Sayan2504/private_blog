@@ -182,6 +182,69 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to post_url(@post)
   end
 
+  # --- How the app talks back ---------------------------------------------
+
+  test "an error flash is assertive and does not retire itself" do
+    sign_in users(:two)
+
+    get edit_post_url(@post)
+    follow_redirect!
+
+    assert_select "[role=alert]" do
+      assert_select "[data-flash-auto-dismiss-value=false]"
+      assert_select "button[aria-label=Dismiss]"
+    end
+  end
+
+  test "a confirmation flash stays polite and retires itself" do
+    sign_in users(:one)
+
+    patch post_url(@post), params: { post: { title: @post.title } }
+    follow_redirect!
+
+    assert_select "[role=status][data-flash-auto-dismiss-value=true]"
+  end
+
+  # --- Publishing state ---------------------------------------------------
+
+  test "publishing a draft sets its published_at" do
+    sign_in users(:one)
+
+    patch post_url(@draft), params: { post: { title: @draft.title }, publish: "true" }
+
+    assert_redirected_to post_url(@draft)
+    assert_predicate @draft.reload, :published?
+  end
+
+  test "saving a published post without a flag leaves it published" do
+    sign_in users(:one)
+    was = @post.published_at
+
+    patch post_url(@post), params: { post: { title: "Edited in place" } }
+
+    assert_predicate @post.reload, :published?
+    assert_equal was.to_i, @post.published_at.to_i
+    assert_equal "Edited in place", @post.title
+  end
+
+  test "unpublishing a published post returns it to drafts" do
+    sign_in users(:one)
+
+    patch post_url(@post), params: { post: { title: @post.title }, unpublish: "true" }
+
+    assert_redirected_to post_url(@post)
+    assert_not_predicate @post.reload, :published?
+    assert_includes users(:one).posts.drafts, @post
+  end
+
+  test "unpublish is refused for a post owned by someone else" do
+    sign_in users(:two)
+
+    patch post_url(@post), params: { post: { title: @post.title }, unpublish: "true" }
+
+    assert_predicate @post.reload, :published?
+  end
+
   test "should not update post owned by someone else" do
     sign_in users(:two)
 

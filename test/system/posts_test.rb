@@ -14,7 +14,7 @@ class PostsTest < ApplicationSystemTestCase
     sign_in_as(users(:one))
 
     visit published_posts_url
-    assert_selector "h1", text: "Your published stories"
+    assert_selector "h1", text: "Everything published on MindCanvas"
   end
 
   test "should create post" do
@@ -22,7 +22,7 @@ class PostsTest < ApplicationSystemTestCase
 
     visit new_post_url
     fill_in "Title", with: "A brand new story"
-    click_on "Save Draft"
+    click_on "Save draft"
 
     assert_text "Post was successfully created"
   end
@@ -32,9 +32,29 @@ class PostsTest < ApplicationSystemTestCase
 
     visit edit_post_url(@post)
     fill_in "Title", with: "Updated title"
-    click_on "Save Draft"
+    click_on "Save changes"
 
     assert_text "Post was successfully updated"
+  end
+
+  test "editing a published story offers no button that claims to draft it" do
+    sign_in_as(users(:one))
+
+    visit edit_post_url(@post)
+
+    assert_selector "button", text: "Save changes"
+    assert_selector "button", text: "Unpublish"
+    assert_no_selector "button", text: "Save draft"
+  end
+
+  test "should unpublish a published post back to drafts" do
+    sign_in_as(users(:one))
+
+    visit edit_post_url(@post)
+    accept_confirm { click_on "Unpublish" }
+
+    assert_text "Story moved back to drafts"
+    assert_not_predicate @post.reload, :published?
   end
 
   test "should destroy Post" do

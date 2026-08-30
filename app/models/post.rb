@@ -22,7 +22,36 @@ class Post < ApplicationRecord
 
   private
 
+  # Slugs are generated once and then left alone, so a published URL never
+  # moves under a reader who bookmarked it — retitling a post changes the
+  # heading, not the address.
+  #
+  # Uniqueness is resolved here rather than left to the validation. Two posts
+  # called "Notes" is an ordinary thing to want, and the old version turned it
+  # into "Slug has already been taken" — an error about a field that does not
+  # appear anywhere in the form and that the author has no way to act on.
+  # A numbered suffix is what every other publishing tool does with a
+  # collision, and it needs no explaining.
   def generate_slug
-    self.slug = title.to_s.parameterize if slug.blank? && title.present?
+    return if slug.present? || title.blank?
+
+    # A title of nothing but punctuation or emoji parameterizes to an empty
+    # string, which would fail the presence validation with an equally
+    # unactionable message.
+    base = title.to_s.parameterize.presence || "post"
+
+    candidate = base
+    suffix = 1
+
+    while slug_taken?(candidate)
+      suffix += 1
+      candidate = "#{base}-#{suffix}"
+    end
+
+    self.slug = candidate
+  end
+
+  def slug_taken?(candidate)
+    Post.where(slug: candidate).where.not(id: id).exists?
   end
 end
