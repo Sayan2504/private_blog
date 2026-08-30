@@ -116,7 +116,9 @@
     <%= render ButtonComponent.new(
           variant: :danger, size: :md,
           href: registration_path(resource_name), method: :delete,
-          confirm: "Delete your account and all of your stories? This cannot be undone."
+          confirm: "Your account and every story you have written go with it, published or not. This cannot be undone.",
+          confirm_title: "Delete your account?",
+          confirm_label: "Delete account"
         ) do %>
       Delete account
     <% end %>

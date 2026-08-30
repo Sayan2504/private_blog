@@ -1063,3 +1063,101 @@ trix-toolbar .trix-button--dialog {
     box-shadow: 0 2px 0 0 #f9fafb;
   }
 }
+
+
+/* --- Confirmation dialog -------------------------------------------------
+   The app's replacement for window.confirm (see confirm_controller.js). A
+   native <dialog> opened with showModal(), which is what gives us the focus
+   trap, Escape, and stacking above every z-index in the app without writing
+   any of it.
+
+   Unlayered, deliberately: the UA's own dialog styles are unlayered too, and
+   a `@layer` block would lose to them regardless of specificity — the same
+   trap the Trix rules at the top of this file document. */
+.confirm-dialog {
+  /* A modal <dialog> is positioned entirely by its margins against `inset: 0`,
+     and Tailwind's preflight zeroes the margin on every element — without this
+     the dialog sits in the top-left corner with nothing in the app's own CSS
+     to explain why.
+     
+     `auto` on three sides and a fixed value on top is what anchors it near the
+     top of the viewport rather than centring it vertically: the horizontal
+     `auto` pair still centres it across, and the `auto` bottom absorbs all the
+     remaining space instead of splitting it with the top. */
+  margin: 2rem auto auto;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  width: 100%;
+  max-width: min(30rem, calc(100vw - 2rem));
+  max-height: none;
+  overflow: visible;
+}
+
+/* The backdrop is the one surface in the app that is allowed to dim the whole
+   page — it matches the sidebar drawer's scrim, so a modal reads the same
+   whichever one you opened. */
+@media (min-width: 640px) {
+  .confirm-dialog {
+    margin-top: 3.5rem;
+  }
+}
+
+.confirm-dialog::backdrop {
+  background-color: rgb(3 7 18 / 0.45);
+  backdrop-filter: blur(4px);
+}
+
+/* Entry is animated on open rather than transitioned, because the element
+   goes from display:none to shown in one step and a transition has no start
+   value to work from. ::backdrop gets the same treatment for the same reason. */
+.confirm-dialog[open] {
+  animation: confirm-dialog-in 220ms var(--ease-soft) both;
+}
+
+.confirm-dialog[open]::backdrop {
+  animation: confirm-backdrop-in 220ms var(--ease-soft) both;
+}
+
+/* Leaving retraces the entrance, a touch quicker. The controller holds the
+   dialog open for the length of this before calling close(), or the panel
+   would blink out instead of going. */
+.confirm-dialog.is-closing,
+.confirm-dialog.is-closing[open] {
+  animation: confirm-dialog-out 160ms var(--ease-soft) both;
+}
+
+.confirm-dialog.is-closing[open]::backdrop {
+  animation: confirm-backdrop-out 160ms var(--ease-soft) both;
+}
+
+/* Anchored at the top, the dialog drops in from just above its resting place
+   and leaves the same way — the same direction as the app's reveal-from-top
+   entrances. Rising from below would have it travelling away from the edge it
+   is now attached to. */
+@keyframes confirm-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.97);
+  }
+}
+
+@keyframes confirm-dialog-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.985);
+  }
+}
+
+@keyframes confirm-backdrop-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes confirm-backdrop-out {
+  to {
+    opacity: 0;
+  }
+}

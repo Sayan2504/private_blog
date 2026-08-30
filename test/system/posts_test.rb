@@ -51,7 +51,8 @@ class PostsTest < ApplicationSystemTestCase
     sign_in_as(users(:one))
 
     visit edit_post_url(@post)
-    accept_confirm { click_on "Unpublish" }
+    click_on "Unpublish"
+    accept_dialog "Unpublish"
 
     assert_text "Story moved back to drafts"
     assert_not_predicate @post.reload, :published?
@@ -61,7 +62,8 @@ class PostsTest < ApplicationSystemTestCase
     sign_in_as(users(:one))
 
     visit post_url(@post)
-    accept_confirm { click_on "Delete" }
+    click_on "Delete"
+    accept_dialog "Delete story"
 
     assert_text "Post was successfully destroyed"
   end

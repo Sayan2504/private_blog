@@ -23,13 +23,16 @@ class ButtonComponent < ViewComponent::Base
     lg: "h-11 px-5 text-sm"
   }.freeze
 
-  def initialize(variant: :primary, size: :md, href: nil, method: nil, icon: nil, confirm: nil, type: "button", **options)
+  def initialize(variant: :primary, size: :md, href: nil, method: nil, icon: nil, confirm: nil,
+                 confirm_title: nil, confirm_label: nil, type: "button", **options)
     @variant = variant
     @size = size
     @href = href
     @method = method
     @icon = icon
     @confirm = confirm
+    @confirm_title = confirm_title
+    @confirm_label = confirm_label
     @type = type
     @options = options
   end
@@ -82,9 +85,26 @@ class ButtonComponent < ViewComponent::Base
     content_tag :span, @icon.html_safe, class: "inline-flex"
   end
 
+  # The confirmation dialog (ConfirmDialogComponent) reads these off whichever
+  # element raised it. Only `turbo_confirm` is Turbo's own; the rest are ours,
+  # and each is omitted when unset so the dialog falls back to its defaults
+  # rather than being handed an empty string.
   def confirm_data
     merged = (@options[:data] || {}).dup
-    merged[:turbo_confirm] = @confirm if @confirm
+    return merged unless @confirm
+
+    merged[:turbo_confirm] = @confirm
+    merged[:turbo_confirm_title] = @confirm_title if @confirm_title
+    merged[:turbo_confirm_label] = @confirm_label if @confirm_label
+
+    # Intent is not restated at the call site: a button already says whether it
+    # is destructive through its variant, and the dialog should agree with the
+    # button that opened it.
+    merged[:turbo_confirm_variant] = destructive? ? "danger" : "primary"
     merged
+  end
+
+  def destructive?
+    %i[ danger ghost_danger ].include?(@variant)
   end
 end

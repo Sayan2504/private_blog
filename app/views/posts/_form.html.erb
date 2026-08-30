@@ -56,7 +56,9 @@
           <%= render ButtonComponent.new(
                 variant: :secondary, size: :md, type: "submit",
                 name: "unpublish", value: "true",
-                confirm: "Move this story back to drafts? It will disappear from All stories until you publish it again."
+                confirm: "It will disappear from All stories until you publish it again. Nothing you have written is lost.",
+                confirm_title: "Move this story back to drafts?",
+                confirm_label: "Unpublish"
               ) do %>
             Unpublish
           <% end %>
