@@ -120,8 +120,8 @@
     </div>
 
     <div data-controller="command-palette">
-      <div data-command-palette-target="dialog" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 p-4 pt-24 backdrop-blur-sm flex">
-        <div class="w-full max-w-lg overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-950">
+      <div data-command-palette-target="dialog" data-action="click->command-palette#backdropClick" class="command-palette-backdrop fixed inset-0 z-50 hidden flex items-start justify-center bg-black/40 p-4 pt-24 backdrop-blur-sm">
+        <div class="command-palette-panel w-full max-w-lg overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-950">
           <%= form_with url: search_path, method: :get, data: { command_palette_target: "form", turbo_frame: "command_palette_results" }, class: "flex items-center border-b border-gray-100 px-4 dark:border-gray-800" do |f| %>
             <%= f.search_field :q,
                   placeholder: "Search stories, tags, or authors... (Esc to close)",

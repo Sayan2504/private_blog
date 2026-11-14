@@ -26,13 +26,13 @@ CREATE TABLE public.action_text_rich_texts (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN id SET (pg_attver=26518480);
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN name SET (pg_attver=26518480);
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN body SET (pg_attver=26518480);
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN record_type SET (pg_attver=26518480);
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN record_id SET (pg_attver=26518480);
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN created_at SET (pg_attver=26518480);
-ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN updated_at SET (pg_attver=26518480);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN id SET (pg_attver=145984440);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN name SET (pg_attver=145984440);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN body SET (pg_attver=145984440);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN record_type SET (pg_attver=145984440);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN record_id SET (pg_attver=145984440);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN created_at SET (pg_attver=145984440);
+ALTER TABLE ONLY public.action_text_rich_texts ALTER COLUMN updated_at SET (pg_attver=145984440);
 
 
 --
@@ -66,12 +66,12 @@ CREATE TABLE public.active_storage_attachments (
     blob_id bigint NOT NULL,
     created_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET (pg_attver=26539552);
-ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN name SET (pg_attver=26539552);
-ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN record_type SET (pg_attver=26539552);
-ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN record_id SET (pg_attver=26539552);
-ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN blob_id SET (pg_attver=26539552);
-ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN created_at SET (pg_attver=26539552);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN id SET (pg_attver=146007616);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN name SET (pg_attver=146007616);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN record_type SET (pg_attver=146007616);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN record_id SET (pg_attver=146007616);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN blob_id SET (pg_attver=146007616);
+ALTER TABLE ONLY public.active_storage_attachments ALTER COLUMN created_at SET (pg_attver=146007616);
 
 
 --
@@ -108,15 +108,15 @@ CREATE TABLE public.active_storage_blobs (
     checksum character varying,
     created_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN key SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN filename SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN content_type SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN metadata SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN service_name SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN byte_size SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN checksum SET (pg_attver=26557160);
-ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN created_at SET (pg_attver=26557160);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN id SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN key SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN filename SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN content_type SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN metadata SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN service_name SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN byte_size SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN checksum SET (pg_attver=146026536);
+ALTER TABLE ONLY public.active_storage_blobs ALTER COLUMN created_at SET (pg_attver=146026536);
 
 
 --
@@ -147,9 +147,9 @@ CREATE TABLE public.active_storage_variant_records (
     blob_id bigint NOT NULL,
     variation_digest character varying NOT NULL
 );
-ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET (pg_attver=26578672);
-ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN blob_id SET (pg_attver=26578672);
-ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN variation_digest SET (pg_attver=26578672);
+ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN id SET (pg_attver=146050176);
+ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN blob_id SET (pg_attver=146050176);
+ALTER TABLE ONLY public.active_storage_variant_records ALTER COLUMN variation_digest SET (pg_attver=146050176);
 
 
 --
@@ -181,10 +181,10 @@ CREATE TABLE public.ar_internal_metadata (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN key SET (pg_attver=26594432);
-ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN value SET (pg_attver=26594432);
-ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN created_at SET (pg_attver=26594432);
-ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN updated_at SET (pg_attver=26594432);
+ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN key SET (pg_attver=146066688);
+ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN value SET (pg_attver=146066688);
+ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN created_at SET (pg_attver=146066688);
+ALTER TABLE ONLY public.ar_internal_metadata ALTER COLUMN updated_at SET (pg_attver=146066688);
 
 
 --
@@ -198,11 +198,11 @@ CREATE TABLE public.bookmarks (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET (pg_attver=87599544);
-ALTER TABLE ONLY public.bookmarks ALTER COLUMN user_id SET (pg_attver=87599544);
-ALTER TABLE ONLY public.bookmarks ALTER COLUMN post_id SET (pg_attver=87599544);
-ALTER TABLE ONLY public.bookmarks ALTER COLUMN created_at SET (pg_attver=87599544);
-ALTER TABLE ONLY public.bookmarks ALTER COLUMN updated_at SET (pg_attver=87599544);
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN id SET (pg_attver=146079080);
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN user_id SET (pg_attver=146079080);
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN post_id SET (pg_attver=146079080);
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN created_at SET (pg_attver=146079080);
+ALTER TABLE ONLY public.bookmarks ALTER COLUMN updated_at SET (pg_attver=146079080);
 
 
 --
@@ -236,12 +236,12 @@ CREATE TABLE public.comments (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.comments ALTER COLUMN id SET (pg_attver=87673816);
-ALTER TABLE ONLY public.comments ALTER COLUMN post_id SET (pg_attver=87673816);
-ALTER TABLE ONLY public.comments ALTER COLUMN user_id SET (pg_attver=87673816);
-ALTER TABLE ONLY public.comments ALTER COLUMN body SET (pg_attver=87673816);
-ALTER TABLE ONLY public.comments ALTER COLUMN created_at SET (pg_attver=87673816);
-ALTER TABLE ONLY public.comments ALTER COLUMN updated_at SET (pg_attver=87673816);
+ALTER TABLE ONLY public.comments ALTER COLUMN id SET (pg_attver=146090424);
+ALTER TABLE ONLY public.comments ALTER COLUMN post_id SET (pg_attver=146090424);
+ALTER TABLE ONLY public.comments ALTER COLUMN user_id SET (pg_attver=146090424);
+ALTER TABLE ONLY public.comments ALTER COLUMN body SET (pg_attver=146090424);
+ALTER TABLE ONLY public.comments ALTER COLUMN created_at SET (pg_attver=146090424);
+ALTER TABLE ONLY public.comments ALTER COLUMN updated_at SET (pg_attver=146090424);
 
 
 --
@@ -274,11 +274,11 @@ CREATE TABLE public.follows (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.follows ALTER COLUMN id SET (pg_attver=206240920);
-ALTER TABLE ONLY public.follows ALTER COLUMN follower_id SET (pg_attver=206240920);
-ALTER TABLE ONLY public.follows ALTER COLUMN followed_id SET (pg_attver=206240920);
-ALTER TABLE ONLY public.follows ALTER COLUMN created_at SET (pg_attver=206240920);
-ALTER TABLE ONLY public.follows ALTER COLUMN updated_at SET (pg_attver=206240920);
+ALTER TABLE ONLY public.follows ALTER COLUMN id SET (pg_attver=206568368);
+ALTER TABLE ONLY public.follows ALTER COLUMN follower_id SET (pg_attver=206568368);
+ALTER TABLE ONLY public.follows ALTER COLUMN followed_id SET (pg_attver=206568368);
+ALTER TABLE ONLY public.follows ALTER COLUMN created_at SET (pg_attver=206568368);
+ALTER TABLE ONLY public.follows ALTER COLUMN updated_at SET (pg_attver=206568368);
 
 
 --
@@ -315,15 +315,15 @@ CREATE TABLE public.notifications (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.notifications ALTER COLUMN id SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN recipient_id SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN actor_id SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN notifiable_type SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN notifiable_id SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN action SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN read_at SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN created_at SET (pg_attver=206321728);
-ALTER TABLE ONLY public.notifications ALTER COLUMN updated_at SET (pg_attver=206321728);
+ALTER TABLE ONLY public.notifications ALTER COLUMN id SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN recipient_id SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN actor_id SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN notifiable_type SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN notifiable_id SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN action SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN read_at SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN created_at SET (pg_attver=206643912);
+ALTER TABLE ONLY public.notifications ALTER COLUMN updated_at SET (pg_attver=206643912);
 
 
 --
@@ -356,11 +356,11 @@ CREATE TABLE public.post_tags (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.post_tags ALTER COLUMN id SET (pg_attver=87557608);
-ALTER TABLE ONLY public.post_tags ALTER COLUMN post_id SET (pg_attver=87557608);
-ALTER TABLE ONLY public.post_tags ALTER COLUMN tag_id SET (pg_attver=87557608);
-ALTER TABLE ONLY public.post_tags ALTER COLUMN created_at SET (pg_attver=87557608);
-ALTER TABLE ONLY public.post_tags ALTER COLUMN updated_at SET (pg_attver=87557608);
+ALTER TABLE ONLY public.post_tags ALTER COLUMN id SET (pg_attver=146108312);
+ALTER TABLE ONLY public.post_tags ALTER COLUMN post_id SET (pg_attver=146108312);
+ALTER TABLE ONLY public.post_tags ALTER COLUMN tag_id SET (pg_attver=146108312);
+ALTER TABLE ONLY public.post_tags ALTER COLUMN created_at SET (pg_attver=146108312);
+ALTER TABLE ONLY public.post_tags ALTER COLUMN updated_at SET (pg_attver=146108312);
 
 
 --
@@ -400,18 +400,18 @@ CREATE TABLE public.posts (
     scheduled_for timestamp(6) without time zone,
     search_vector tsvector
 );
-ALTER TABLE ONLY public.posts ALTER COLUMN id SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN title SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN created_at SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN updated_at SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN author SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN published_at SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN slug SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN views_count SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN user_id SET (pg_attver=26606088);
-ALTER TABLE ONLY public.posts ALTER COLUMN reactions_count SET (pg_attver=87653520);
-ALTER TABLE ONLY public.posts ALTER COLUMN scheduled_for SET (pg_attver=206087408);
-ALTER TABLE ONLY public.posts ALTER COLUMN search_vector SET (pg_attver=206177544);
+ALTER TABLE ONLY public.posts ALTER COLUMN id SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN title SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN created_at SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN updated_at SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN author SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN published_at SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN slug SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN views_count SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN user_id SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN reactions_count SET (pg_attver=146119200);
+ALTER TABLE ONLY public.posts ALTER COLUMN scheduled_for SET (pg_attver=206437936);
+ALTER TABLE ONLY public.posts ALTER COLUMN search_vector SET (pg_attver=206520944);
 
 
 --
@@ -445,12 +445,12 @@ CREATE TABLE public.reactions (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.reactions ALTER COLUMN id SET (pg_attver=87625920);
-ALTER TABLE ONLY public.reactions ALTER COLUMN user_id SET (pg_attver=87625920);
-ALTER TABLE ONLY public.reactions ALTER COLUMN post_id SET (pg_attver=87625920);
-ALTER TABLE ONLY public.reactions ALTER COLUMN count SET (pg_attver=87625920);
-ALTER TABLE ONLY public.reactions ALTER COLUMN created_at SET (pg_attver=87625920);
-ALTER TABLE ONLY public.reactions ALTER COLUMN updated_at SET (pg_attver=87625920);
+ALTER TABLE ONLY public.reactions ALTER COLUMN id SET (pg_attver=146142416);
+ALTER TABLE ONLY public.reactions ALTER COLUMN user_id SET (pg_attver=146142416);
+ALTER TABLE ONLY public.reactions ALTER COLUMN post_id SET (pg_attver=146142416);
+ALTER TABLE ONLY public.reactions ALTER COLUMN count SET (pg_attver=146142416);
+ALTER TABLE ONLY public.reactions ALTER COLUMN created_at SET (pg_attver=146142416);
+ALTER TABLE ONLY public.reactions ALTER COLUMN updated_at SET (pg_attver=146142416);
 
 
 --
@@ -479,7 +479,7 @@ ALTER SEQUENCE public.reactions_id_seq OWNED BY public.reactions.id;
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
-ALTER TABLE ONLY public.schema_migrations ALTER COLUMN version SET (pg_attver=26624848);
+ALTER TABLE ONLY public.schema_migrations ALTER COLUMN version SET (pg_attver=146154696);
 
 
 --
@@ -493,11 +493,11 @@ CREATE TABLE public.tags (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
 );
-ALTER TABLE ONLY public.tags ALTER COLUMN id SET (pg_attver=87480424);
-ALTER TABLE ONLY public.tags ALTER COLUMN name SET (pg_attver=87480424);
-ALTER TABLE ONLY public.tags ALTER COLUMN slug SET (pg_attver=87480424);
-ALTER TABLE ONLY public.tags ALTER COLUMN created_at SET (pg_attver=87480424);
-ALTER TABLE ONLY public.tags ALTER COLUMN updated_at SET (pg_attver=87480424);
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET (pg_attver=146165656);
+ALTER TABLE ONLY public.tags ALTER COLUMN name SET (pg_attver=146165656);
+ALTER TABLE ONLY public.tags ALTER COLUMN slug SET (pg_attver=146165656);
+ALTER TABLE ONLY public.tags ALTER COLUMN created_at SET (pg_attver=146165656);
+ALTER TABLE ONLY public.tags ALTER COLUMN updated_at SET (pg_attver=146165656);
 
 
 --
@@ -537,18 +537,18 @@ CREATE TABLE public.users (
     mobile_number character varying,
     interests character varying[] DEFAULT '{}'::character varying[] NOT NULL
 );
-ALTER TABLE ONLY public.users ALTER COLUMN id SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN email SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN encrypted_password SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN reset_password_token SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN reset_password_sent_at SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN remember_created_at SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN created_at SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN updated_at SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN name SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN address SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN mobile_number SET (pg_attver=26635488);
-ALTER TABLE ONLY public.users ALTER COLUMN interests SET (pg_attver=26635488);
+ALTER TABLE ONLY public.users ALTER COLUMN id SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN email SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN encrypted_password SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN reset_password_token SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN reset_password_sent_at SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN remember_created_at SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN created_at SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN updated_at SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN name SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN address SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN mobile_number SET (pg_attver=146183888);
+ALTER TABLE ONLY public.users ALTER COLUMN interests SET (pg_attver=146183888);
 
 
 --
