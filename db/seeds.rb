@@ -1,3 +1,11 @@
+puts "Seeding default author..."
+
+author = User.find_or_create_by!(email: "sayan@mindcanvas.local") do |u|
+  u.name = "Sayan"
+  u.password = "password123"
+  u.password_confirmation = "password123"
+end
+
 puts "Seeding posts..."
 
 posts_data = [
@@ -22,14 +30,12 @@ posts_data = [
 ]
 
 posts_data.each do |data|
-  post = Post.create!(
-    title: data[:title],
-    author: data[:author],
-    published_at: data[:published_at]
-  )
+  post = author.posts.find_or_initialize_by(title: data[:title])
+  post.author = data[:author]
+  post.published_at = data[:published_at]
   post.content = ActionText::Content.new(data[:content])
   post.save!
-  puts "  Created: #{post.title}"
+  puts "  Seeded: #{post.title}"
 end
 
 puts "Done! Created #{Post.count} posts."

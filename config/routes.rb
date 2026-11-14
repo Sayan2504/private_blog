@@ -7,8 +7,16 @@ Rails.application.routes.draw do
   # Singular: you only ever look at your own. Editing lives on Devise's
   # registration form at /users/edit, which this page links to.
   resource :account, only: :show, controller: "accounts"
+  resources :authors, only: :show
+  resources :bookmarks, only: %i[ index create destroy ]
+  resources :follows, only: %i[ create destroy ]
+  resources :notifications, only: :index
+  get "search", to: "search#index", as: :search
+  get "sitemap", to: "sitemaps#show", defaults: { format: :xml }, as: :sitemap
 
   resources :posts, except: [ :index ] do
+    resource :reaction, only: :create
+    resources :comments, only: %i[ create destroy ]
     collection do
       # Public: every published post, by anyone. Signed-out readers land here.
       get :published

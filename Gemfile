@@ -51,6 +51,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # Modularize Rails monolith with package boundaries
+  gem "packwerk", require: false
 end
 
 group :development do
@@ -69,3 +72,5 @@ gem "tailwindcss-rails", "~> 4.4"
 gem "view_component", "~> 4.11"
 
 gem "devise", "~> 5.0"
+
+gem "packs-rails"

@@ -148,8 +148,10 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "anonymous view increments views_count" do
-    assert_difference("@post.reload.views_count", 1) do
-      get post_url(@post)
+    perform_enqueued_jobs do
+      assert_difference("@post.reload.views_count", 1) do
+        get post_url(@post)
+      end
     end
   end
 
@@ -271,5 +273,25 @@ class PostsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to post_url(@post)
+  end
+
+  test "published filters by search query" do
+    get published_posts_url(q: "Another")
+
+    assert_response :success
+    assert_match "Another story", response.body
+    assert_no_match "MyString", response.body
+  end
+
+  test "destroy via turbo_stream removes the post card" do
+    sign_in users(:one)
+
+    assert_difference("Post.count", -1) do
+      delete post_url(@post), as: :turbo_stream
+    end
+
+    assert_response :success
+    assert_equal "text/vnd.turbo-stream.html", response.media_type
+    assert_match %(target="post_#{@post.id}"), response.body
   end
 end

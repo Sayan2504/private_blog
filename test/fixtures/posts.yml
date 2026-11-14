@@ -6,14 +6,17 @@
 
 one:
   title: MyString
+  slug: mystring
   user: one
   published_at: <%= 3.days.ago %>
 
 two:
   title: Another story
+  slug: another-story
   user: two
   published_at: <%= 2.days.ago %>
 
 draft_one:
   title: Unfinished idea
+  slug: unfinished-idea
   user: one

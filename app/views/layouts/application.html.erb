@@ -86,7 +86,7 @@
           header cluster on the same gutter. They are toasts, not a banner:
           nothing in the page measure is covered and nothing is pushed down,
           so a confirmation can never land on top of a page heading. %>
-      <div class="pointer-events-none absolute inset-x-0 top-14 z-30 flex flex-col items-end gap-2 px-2 min-[425px]:top-[4.5rem] min-[425px]:px-4">
+      <div id="flash-messages" class="pointer-events-none absolute inset-x-0 top-14 z-30 flex flex-col items-end gap-2 px-2 min-[425px]:top-[4.5rem] min-[425px]:px-4">
         <% if notice.present? %>
           <%= render FlashComponent.new(type: :notice, message: notice) %>
         <% end %>
@@ -116,6 +116,24 @@
             <%= yield %>
           </div>
         </main>
+      </div>
+    </div>
+
+    <div data-controller="command-palette">
+      <div data-command-palette-target="dialog" class="fixed inset-0 z-50 hidden items-start justify-center bg-black/40 p-4 pt-24 backdrop-blur-sm flex">
+        <div class="w-full max-w-lg overflow-hidden rounded-3xl border border-gray-200 bg-white shadow-2xl dark:border-gray-800 dark:bg-gray-950">
+          <%= form_with url: search_path, method: :get, data: { command_palette_target: "form", turbo_frame: "command_palette_results" }, class: "flex items-center border-b border-gray-100 px-4 dark:border-gray-800" do |f| %>
+            <%= f.search_field :q,
+                  placeholder: "Search stories, tags, or authors... (Esc to close)",
+                  autocomplete: "off",
+                  data: { command_palette_target: "input", action: "input->command-palette#search" },
+                  class: "w-full bg-transparent py-3.5 text-sm text-gray-900 placeholder-gray-400 focus:outline-none dark:text-gray-100" %>
+            <button type="button" data-action="command-palette#close" class="text-xs text-gray-400 hover:text-gray-600">Esc</button>
+          <% end %>
+          <div class="max-h-80 overflow-y-auto">
+            <%= turbo_frame_tag "command_palette_results" %>
+          </div>
+        </div>
       </div>
     </div>
   </body>
