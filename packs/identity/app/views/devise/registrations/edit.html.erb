@@ -1,0 +1,126 @@
+<% content_for :title, "Edit your details — MindCanvas" %>
+<% content_for :sidebar_active, "account" %>
+
+<%# The write half of the account. My account shows what we hold; this is the
+    one place that changes it, so the fields here mirror that page section for
+    section. It was raw scaffold until now — unstyled <p> tags with no card and
+    no dark mode — which meant the only route out of the account page fell
+    straight out of the app's own frame. %>
+
+<div data-reveal-item class="pb-2">
+  <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">My account</p>
+  <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Edit your details</h1>
+</div>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <section data-reveal-item class="surface-float mt-6 rounded-3xl p-6 sm:p-8">
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Profile</p>
+    <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">About you</h2>
+
+    <div class="mt-6 space-y-5">
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div>
+          <%= f.label :name, class: auth_label_classes %>
+          <%= f.text_field :name, autocomplete: "name", class: auth_field_classes %>
+        </div>
+
+        <div>
+          <%= f.label :mobile_number, "Mobile number", class: auth_label_classes %>
+          <%= f.telephone_field :mobile_number, autocomplete: "tel", placeholder: "+91 98765 43210", class: auth_field_classes %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :address, class: auth_label_classes %>
+        <%= f.text_area :address, rows: 2, autocomplete: "street-address", class: auth_field_classes %>
+      </div>
+
+      <div>
+        <%= f.label :interests, class: auth_label_classes %>
+        <p class="<%= auth_hint_classes %>">Separate them with commas</p>
+        <%= f.text_field :interests, value: resource.interests_text, placeholder: "Fiction, distributed systems, cycling", class: auth_field_classes %>
+      </div>
+
+      <div>
+        <%= f.label :email, class: auth_label_classes %>
+        <%= f.email_field :email, autocomplete: "email", class: auth_field_classes %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          Waiting on confirmation for <span class="font-medium text-gray-900 dark:text-gray-100"><%= resource.unconfirmed_email %></span>.
+        </p>
+      <% end %>
+    </div>
+  </section>
+
+  <section data-reveal-item class="surface-float mt-6 rounded-3xl p-6 sm:p-8">
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Security</p>
+    <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Password</h2>
+
+    <div class="mt-6 space-y-5">
+      <div>
+        <%= f.label :password, "New password", class: auth_label_classes %>
+        <p class="<%= auth_hint_classes %>">
+          Leave blank to keep your current one<%= " — #{@minimum_password_length} characters minimum" if @minimum_password_length %>
+        </p>
+        <%= f.password_field :password, autocomplete: "new-password", class: auth_field_classes %>
+      </div>
+
+      <div>
+        <%= f.label :password_confirmation, "Confirm new password", class: auth_label_classes %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: auth_field_classes %>
+      </div>
+
+      <%# Devise will not save any of the above without this, so it is stated
+          as the requirement it is rather than left as a field to discover. %>
+      <div>
+        <%= f.label :current_password, "Current password", class: auth_label_classes %>
+        <p class="<%= auth_hint_classes %>">Required to save any change on this page</p>
+        <%= f.password_field :current_password, autocomplete: "current-password", class: auth_field_classes %>
+      </div>
+    </div>
+  </section>
+
+  <%# The same sticky action bar the post editor uses. This form is long enough
+      that a save button pinned to the bottom of the document sits below the
+      fold for the whole time you are filling it in — and, being a reveal item,
+      would be invisible until scrolled to. It lifts off its surface only while
+      it is actually floating over content. %>
+  <div data-controller="elevate" class="mt-6">
+    <div data-elevate-target="bar" class="motion-elevate surface-float sticky bottom-4 z-30 flex items-center justify-between gap-3 rounded-2xl px-4 py-3">
+      <%= render ButtonComponent.new(variant: :ghost, size: :md, href: account_path) do %>
+        Cancel
+      <% end %>
+      <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit", submits_with: "Saving…") do %>
+        Save changes
+      <% end %>
+    </div>
+
+    <div data-elevate-target="sentinel" class="h-px"></div>
+  </div>
+<% end %>
+
+<%# Kept apart from the form above, and last: it is the one action on this page
+    that cannot be undone. %>
+<section data-reveal-item class="surface-float mt-10 rounded-3xl p-6 sm:p-8">
+  <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Danger zone</p>
+  <h2 class="mt-1 text-lg font-semibold text-gray-900 dark:text-gray-100">Delete your account</h2>
+  <p class="mt-3 text-sm text-gray-600 dark:text-gray-300">
+    This removes your account and every story you've written, published or not. It cannot be undone.
+  </p>
+
+  <div class="mt-5">
+    <%= render ButtonComponent.new(
+          variant: :danger, size: :md,
+          href: registration_path(resource_name), method: :delete,
+          confirm: "Your account and every story you have written go with it, published or not. This cannot be undone.",
+          confirm_title: "Delete your account?",
+          confirm_label: "Delete account"
+        ) do %>
+      Delete account
+    <% end %>
+  </div>
+</section>

@@ -1,0 +1,118 @@
+<%= form_with(model: post, class: "space-y-6", data: { controller: "autosave", autosave_enabled_value: !post.published?, action: "input->autosave#schedule trix-change->autosave#schedule" }) do |form| %>
+  <% unless post.published? %>
+    <div class="flex justify-end">
+      <span data-autosave-target="status" class="text-xs text-gray-400 dark:text-gray-500"></span>
+    </div>
+  <% end %>
+  <% if post.errors.any? %>
+    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+      <div class="flex items-center space-x-2 mb-2">
+        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+        <h3 class="text-sm font-medium text-red-800 dark:text-red-200"><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h3>
+      </div>
+      <ul class="list-disc list-inside text-sm text-red-700 dark:text-red-300 space-y-1">
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <!-- Title -->
+  <div>
+    <%= form.text_field :title,
+      placeholder: "Title",
+      class: "w-full text-2xl font-bold text-gray-900 dark:text-gray-100 placeholder-gray-300 dark:placeholder-gray-600 border-0 p-0 bg-transparent field-writing",
+      autofocus: true %>
+  </div>
+
+  <!-- Author -->
+  <div>
+    <%# Prefilled from the account rather than left blank on every new post.
+        It stays editable — a post can be written under another byline — but
+        the common case no longer means retyping your own name each time. %>
+    <%= form.text_field :author,
+      value: post.author.presence || current_user&.name,
+      placeholder: "Author name",
+      class: "w-full text-sm text-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-gray-600 border-0 p-0 bg-transparent field-writing" %>
+  </div>
+
+  <!-- Tags -->
+  <div>
+    <%= form.text_field :tag_list,
+      value: post.tag_list,
+      placeholder: "Tags (comma-separated, e.g. rails, hotwire, design)",
+      class: "w-full text-sm text-gray-700 dark:text-gray-300 placeholder-gray-300 dark:placeholder-gray-600 border-0 p-0 bg-transparent field-writing" %>
+  </div>
+
+  <!-- Cover Image & Schedule -->
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <%= form.label :cover_image, "Cover image", class: "block text-xs font-medium uppercase tracking-[0.16em] text-gray-400 dark:text-gray-500" %>
+      <%= form.file_field :cover_image, accept: "image/*", class: "mt-1.5 block w-full text-xs text-gray-500 file:mr-3 file:rounded-full file:border-0 file:bg-gray-100 file:px-3 file:py-1.5 file:text-xs file:font-medium file:text-gray-700 hover:file:bg-gray-200 dark:text-gray-400 dark:file:bg-gray-800 dark:file:text-gray-200" %>
+    </div>
+    <% unless post.published? %>
+      <div>
+        <%= form.label :scheduled_for, "Schedule publish (optional)", class: "block text-xs font-medium uppercase tracking-[0.16em] text-gray-400 dark:text-gray-500" %>
+        <%= form.datetime_local_field :scheduled_for, class: "mt-1.5 w-full rounded-xl border border-gray-200 bg-transparent px-3 py-1.5 text-xs text-gray-700 dark:border-gray-700 dark:text-gray-300" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Divider -->
+  <hr class="border-gray-100 dark:border-gray-700">
+
+  <!-- Content (Rich Text) -->
+  <div data-controller="rich-editor">
+    <%= form.rich_textarea :content, class: "w-full min-h-[400px] prose max-w-none" %>
+    <p class="mt-2 text-xs text-gray-400 dark:text-gray-500">
+      Supports inline code (<code class="font-mono">&lt;/&gt;</code> / Ctrl+E), code snippet blocks, image/video file uploads & URL embeds, and emojis (😀 or <code class="font-mono">:rocket:</code>).
+    </p>
+  </div>
+
+  <!-- Actions -->
+  <div data-controller="elevate">
+    <div data-elevate-target="bar" class="motion-elevate surface-float sticky bottom-4 z-30 flex items-center justify-between gap-3 rounded-2xl px-4 py-3">
+      <%= render ButtonComponent.new(variant: :ghost, size: :md, href: mine_posts_path) do %>
+        Cancel
+      <% end %>
+
+      <%# The pair of actions depends on where the post already is. A draft can
+          be saved or sent out; a published story can be edited in place or
+          pulled back. The old form showed "Save Draft" on both, which on a
+          published post saved the edit and quietly left it published — a
+          button that named an outcome it did not produce, and the only route
+          back to draft, which did not exist at all. %>
+      <div class="flex items-center space-x-3">
+        <% if post.published? %>
+          <%= render ButtonComponent.new(
+                variant: :secondary, size: :md, type: "submit",
+                name: "unpublish", value: "true",
+                submits_with: "Unpublishing…",
+                confirm: "It will disappear from All stories until you publish it again. Nothing you have written is lost.",
+                confirm_title: "Move this story back to drafts?",
+                confirm_label: "Unpublish"
+              ) do %>
+            Unpublish
+          <% end %>
+          <%= render ButtonComponent.new(variant: :primary, size: :md, type: "submit", submits_with: "Saving…") do %>
+            Save changes
+          <% end %>
+        <% else %>
+          <%= render ButtonComponent.new(variant: :secondary, size: :md, type: "submit", submits_with: "Saving…") do %>
+            Save draft
+          <% end %>
+          <%= render ButtonComponent.new(variant: :success, size: :md, type: "submit", name: "publish", value: "true", submits_with: "Publishing…") do %>
+            Publish
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <%# Marks where the bar comes to rest — once this is on screen the bar is
+        no longer floating, so the shadow comes off. %>
+    <div data-elevate-target="sentinel" class="h-px"></div>
+  </div>
+<% end %>

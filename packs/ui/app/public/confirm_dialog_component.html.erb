@@ -1,0 +1,59 @@
+<%# A native <dialog>, opened with showModal(). That is what buys the focus
+    trap, the Escape key, the top-layer stacking above every z-index in the app
+    and the ::backdrop pseudo-element — all of it behaviour we would otherwise
+    be hand-rolling, and all of it exactly what window.confirm gave us for free
+    before it was replaced.
+
+    It sits as a direct child of <body>, outside the main column, so the
+    sidebar drawer marking that column `inert` can never reach in and disable
+    the dialog's own buttons. %>
+<dialog
+  data-controller="confirm"
+  data-action="cancel->confirm#dismiss click->confirm#dismiss close->confirm#closed"
+  class="confirm-dialog"
+  aria-labelledby="confirm-dialog-title"
+  aria-describedby="confirm-dialog-message"
+>
+  <div class="confirm-panel surface-float rounded-3xl p-6 sm:p-7">
+    <div class="flex items-start gap-4">
+      <% variants.each_key do |key| %>
+        <span
+          data-confirm-target="icon"
+          data-confirm-variant="<%= key %>"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full <%= accent_for(key) %>"
+        >
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <%= icon_for(key) %>
+          </svg>
+        </span>
+      <% end %>
+
+      <div class="min-w-0 flex-1 pt-1">
+        <h2 id="confirm-dialog-title" data-confirm-target="title" class="text-base font-semibold text-gray-900 dark:text-gray-100">
+          Are you sure?
+        </h2>
+        <p id="confirm-dialog-message" data-confirm-target="message" class="mt-2 text-sm leading-relaxed text-gray-600 dark:text-gray-300"></p>
+      </div>
+    </div>
+
+    <%# Reversed on mobile so the confirming action is the one under your thumb
+        last, and the cancel is never the button you hit by reflex. %>
+    <div class="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      <%= render ButtonComponent.new(
+            variant: :secondary, size: :md,
+            data: { confirm_target: "cancel", action: "confirm#cancel" }
+          ) do %>
+        Cancel
+      <% end %>
+
+      <% variants.each_key do |key| %>
+        <%= render ButtonComponent.new(
+              variant: button_variant_for(key), size: :md,
+              data: { confirm_target: "accept", confirm_variant: key, action: "confirm#accept" }
+            ) do %>
+          Confirm
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</dialog>

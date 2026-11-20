@@ -1,0 +1,52 @@
+<% content_for :title, "Reset your password — MindCanvas" %>
+
+<%# Step one of two in the recovery flow: ask for the address, then hand off to
+    passwords/edit once the mailed link comes back. Both steps wear the same
+    card as sign-in and sign-up, so leaving the login screen for this one never
+    feels like leaving the app. %>
+
+<div class="flex min-h-full items-center justify-center">
+  <div data-reveal-item data-reveal-frame class="surface-float w-full max-w-md rounded-3xl p-8">
+    <div data-reveal-item data-reveal-wave class="space-y-2 mb-8">
+      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Account recovery</p>
+      <h1 class="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Reset your password</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-300">Tell us the address on your account and we'll email you a link to choose a new password.</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="space-y-5">
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :email, class: auth_label_classes %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave class="pt-2">
+          <%= f.submit "Send reset link", class: auth_submit_classes , data: { turbo_submits_with: "Sending…" } %>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Devise answers every address with the same confirmation, so the two
+        things a waiting reader actually wonders — where did it go, and how
+        long have I got — are answered here instead of in a support email. %>
+    <div data-reveal-item data-reveal-wave class="mt-6 flex items-start gap-2.5 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+      <svg class="mt-px h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/>
+      </svg>
+      <span>The link is single-use and expires after a few hours. If nothing arrives within a minute, check your spam folder.</span>
+    </div>
+
+    <div data-reveal-item data-reveal-wave class="mt-6 pt-6 space-y-3">
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Remembered it?
+        <%= link_to "Log in", new_session_path(resource_name), class: "font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+      </p>
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Don't have an account?
+        <%= link_to "Sign up", new_registration_path(resource_name), class: "font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+      </p>
+    </div>
+  </div>
+</div>

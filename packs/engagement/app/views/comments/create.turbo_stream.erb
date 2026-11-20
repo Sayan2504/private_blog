@@ -1,0 +1,8 @@
+<%= turbo_stream.append "comments-list" do %>
+  <%= render "comments/comment", comment: @comment, animate: true %>
+<% end %>
+<%= turbo_stream.update "comments-count", @post.comments.count %>
+<%= turbo_stream.update "comment-form" do %>
+  <%= render "comments/form", post: @post, comment: Comment.new %>
+<% end %>
+

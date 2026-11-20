@@ -1,0 +1,7 @@
+<figure class="attachment attachment--content my-4">
+  <%= sanitize(
+        content_attachment.respond_to?(:attachable) ? content_attachment.attachable.content : content_attachment.content,
+        tags: ActionText::ContentHelper.allowed_tags,
+        attributes: ActionText::ContentHelper.allowed_attributes
+      ) %>
+</figure>

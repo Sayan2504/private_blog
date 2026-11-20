@@ -1,0 +1,19 @@
+<%= tag.div id: dom_id(author, :follow), class: (local_assigns[:animate] ? "motion-pop" : nil) do %>
+  <% if user_signed_in? && current_user.id != author.id %>
+    <% follow = current_user.active_follows.find_by(followed: author) %>
+    <% if follow %>
+      <%= button_to follow_path(follow),
+            method: :delete,
+            class: "rounded-full border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 transition duration-200 ease-spring hover:bg-gray-50 active:scale-95 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100" do %>
+        Following
+      <% end %>
+    <% else %>
+      <%= button_to follows_path(author_id: author.id),
+            method: :post,
+            class: "rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition duration-200 ease-spring hover:bg-gray-700 active:scale-95 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300" do %>
+        Follow
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+

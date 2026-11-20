@@ -1,0 +1,79 @@
+<% content_for :title, "All stories — MindCanvas" %>
+<% content_for :sidebar_active, "published" %>
+
+<%# The public archive: every published post by every author, readable
+    without an account. Nothing here is filtered to the current user — that
+    view lives at /posts/mine. %>
+
+<div data-reveal-item class="flex flex-col gap-4 pb-2 sm:flex-row sm:items-end sm:justify-between">
+  <div>
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">All stories <%= @posts.size %></p>
+    <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Everything published on MindCanvas</h1>
+  </div>
+
+  <%= form_with url: published_posts_path,
+        method: :get,
+        data: { controller: "search", turbo_frame: "published_posts", turbo_action: "replace" },
+        class: "w-full sm:w-72" do |f| %>
+    <%= f.search_field :q,
+          value: @query,
+          placeholder: "Search title or author...",
+          aria: { label: "Search published stories" },
+          data: { action: "input->search#submit" },
+          class: "w-full rounded-full border border-gray-200 bg-white/80 px-4 py-2 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-gray-400 focus:outline-none dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-100 dark:placeholder-gray-500" %>
+  <% end %>
+</div>
+
+<%= turbo_frame_tag "published_posts", target: "_top" do %>
+  <% if @popular_tags.any? %>
+    <div class="mt-4 flex flex-wrap items-center gap-2">
+      <%= link_to "All",
+            published_posts_path(q: @query.presence),
+            data: { turbo_frame: "published_posts", turbo_action: "replace" },
+            class: "rounded-full px-3 py-1 text-xs font-medium transition #{@tag.blank? ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900' : 'border border-gray-200 bg-white/70 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900/70 dark:text-gray-300'}" %>
+      <% @popular_tags.each do |tag| %>
+        <%= link_to "##{tag.name}",
+              published_posts_path(tag: tag.slug, q: @query.presence),
+              data: { turbo_frame: "published_posts", turbo_action: "replace" },
+              class: "rounded-full px-3 py-1 text-xs font-medium transition #{@tag == tag.slug ? 'bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900' : 'border border-gray-200 bg-white/70 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900/70 dark:text-gray-300'}" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @posts.any? %>
+    <div data-reveal-stack class="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <% @posts.each do |post| %>
+        <%= render PostCardComponent.new(post: post, current_user: current_user) %>
+      <% end %>
+    </div>
+
+    <% if @has_more %>
+      <div data-reveal-item class="mt-8 flex justify-center">
+        <%= link_to "Load more stories",
+              published_posts_path(page: @page + 1, q: @query.presence, tag: @tag.presence),
+              data: { turbo_frame: "published_posts", turbo_action: "replace" },
+              class: "rounded-full border border-gray-200 bg-white/80 px-5 py-2 text-sm font-medium text-gray-700 shadow-sm transition duration-200 ease-spring hover:-translate-y-0.5 hover:bg-gray-50 active:scale-95 dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-200" %>
+      </div>
+    <% end %>
+  <% elsif @query.present? %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "No matching stories",
+          body: "No published stories matched \"#{@query}\"."
+        ) %>
+  <% elsif user_signed_in? %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "Nothing published yet",
+          body: "Once a story goes live it shows up here for everyone.",
+          cta_label: "Write the first story",
+          cta_href: new_post_path
+        ) %>
+  <% else %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "Nothing published yet",
+          body: "Check back soon — published stories will appear here."
+        ) %>
+  <% end %>
+<% end %>

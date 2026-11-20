@@ -1,0 +1,44 @@
+<% content_for :title, "#{@author.display_name} — MindCanvas" %>
+<% content_for :sidebar_active, "published" %>
+
+<div data-reveal-item class="surface-float rounded-3xl p-6 sm:p-8">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-4">
+      <%= render AvatarComponent.new(name: @author.display_name, size: :lg) %>
+      <div>
+        <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100"><%= @author.display_name %></h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+          <%= pluralize(@posts.size, "published story") %> &middot; <%= number_with_delimiter(@total_views) %> total views
+        </p>
+      </div>
+    </div>
+    <%= render "follows/button", author: @author %>
+  </div>
+
+  <% if @author.interests.any? %>
+    <div class="mt-5 flex flex-wrap gap-2">
+      <% @author.interests.each do |interest| %>
+        <span class="rounded-full border border-gray-200 bg-white/70 px-3 py-1 text-xs font-medium text-gray-600 dark:border-gray-700 dark:bg-gray-800/70 dark:text-gray-300">
+          <%= interest %>
+        </span>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div class="mt-8">
+  <% if @posts.any? %>
+    <div data-reveal-stack class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <% @posts.each do |post| %>
+        <%= render PostCardComponent.new(post: post, current_user: current_user) %>
+      <% end %>
+    </div>
+  <% else %>
+    <%= render EmptyStateComponent.new(
+          icon: :document,
+          title: "No published stories yet",
+          body: "#{@author.display_name} hasn't published any stories yet."
+        ) %>
+  <% end %>
+</div>
+

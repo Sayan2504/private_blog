@@ -1,0 +1,7 @@
+package_paths:
+  - packs/*
+  - .
+
+exclude:
+  - "{bin,node_modules,script,tmp,vendor}/**/*"
+

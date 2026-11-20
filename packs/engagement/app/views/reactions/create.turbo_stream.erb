@@ -1,0 +1,4 @@
+<%= turbo_stream.replace dom_id(@post, :reaction) do %>
+  <%= render "reactions/button", post: @post, animate: true %>
+<% end %>
+

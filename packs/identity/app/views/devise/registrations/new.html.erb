@@ -1,0 +1,84 @@
+<% content_for :title, "Create your account — MindCanvas" %>
+
+<%# Sign-up now collects the profile as well as the credentials, so everything
+    the account page shows is captured once, here, rather than left for a
+    settings screen the reader may never open.
+
+    Only name and the credentials are required. Address, mobile and interests
+    are asked for but optional on purpose: they are not things someone should
+    have to hand over to write a post, and nothing in the app breaks when they
+    are blank. The optional ones say so, so nobody stalls guessing. %>
+
+<div class="flex min-h-full items-center justify-center">
+  <div data-reveal-item data-reveal-frame class="surface-float w-full max-w-lg rounded-3xl p-8">
+    <div data-reveal-item data-reveal-wave class="space-y-2 mb-8">
+      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Get started</p>
+      <h1 class="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Create your account</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-300">Join MindCanvas and start sharing your stories.</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), local: true) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+
+      <div class="space-y-5">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div data-reveal-item data-reveal-wave>
+            <%= f.label :name, class: auth_label_classes %>
+            <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "Sayan Sinha", class: auth_field_classes %>
+          </div>
+
+          <div data-reveal-item data-reveal-wave>
+            <%= f.label :mobile_number, class: auth_label_classes do %>
+              Mobile number <%= optional_marker %>
+            <% end %>
+            <%= f.telephone_field :mobile_number, autocomplete: "tel", placeholder: "+91 98765 43210", class: auth_field_classes %>
+          </div>
+        </div>
+
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :address, class: auth_label_classes do %>
+            Address <%= optional_marker %>
+          <% end %>
+          <%= f.text_area :address, rows: 2, autocomplete: "street-address", placeholder: "Kolkata, India", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :interests, class: auth_label_classes do %>
+            Interests <%= optional_marker %>
+          <% end %>
+          <p class="<%= auth_hint_classes %>">Separate them with commas</p>
+          <%= f.text_field :interests, value: resource.interests_text, placeholder: "Fiction, distributed systems, cycling", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :email, class: auth_label_classes %>
+          <%= f.email_field :email, autocomplete: "email", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :password, class: auth_label_classes %>
+          <% if @minimum_password_length %>
+            <p class="<%= auth_hint_classes %>"><%= @minimum_password_length %> characters minimum</p>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :password_confirmation, "Confirm password", class: auth_label_classes %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave class="pt-2">
+          <%= f.submit "Create account", class: auth_submit_classes , data: { turbo_submits_with: "Creating your account…" } %>
+        </div>
+      </div>
+    <% end %>
+
+    <div data-reveal-item data-reveal-wave class="mt-6 pt-6">
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Already have an account?
+        <%= link_to "Log in", new_session_path(resource_name), class: "font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+      </p>
+    </div>
+  </div>
+</div>

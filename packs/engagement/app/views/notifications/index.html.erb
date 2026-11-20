@@ -1,0 +1,38 @@
+<% content_for :title, "Notifications — MindCanvas" %>
+<% content_for :sidebar_active, "notifications" %>
+
+<div data-reveal-item class="flex flex-col gap-2 pb-2 sm:flex-row sm:items-end sm:justify-between">
+  <div>
+    <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Activity</p>
+    <h1 class="mt-1 text-2xl font-semibold text-gray-900 dark:text-gray-100">Notifications</h1>
+  </div>
+</div>
+
+<% if @notifications.any? %>
+  <div class="mt-6 space-y-3">
+    <% @notifications.each do |notification| %>
+      <div data-reveal-item data-reveal-fast class="surface-float flex items-center justify-between gap-4 rounded-2xl p-4 transition duration-200 ease-soft hover:-translate-y-0.5">
+        <div class="flex items-center gap-3">
+          <%= render AvatarComponent.new(name: notification.actor.display_name, size: :sm) %>
+          <div class="text-sm text-gray-700 dark:text-gray-300">
+            <%= link_to notification.actor.display_name, author_path(notification.actor), class: "font-medium text-gray-900 hover:underline dark:text-gray-100" %>
+            <span><%= notification.action %></span>
+            <% if notification.notifiable.is_a?(Post) %>
+              <%= link_to notification.notifiable.title, post_path(notification.notifiable), class: "font-medium text-gray-900 hover:underline dark:text-gray-100" %>
+            <% elsif notification.notifiable.respond_to?(:post) && notification.notifiable.post.present? %>
+              <%= link_to notification.notifiable.post.title, post_path(notification.notifiable.post), class: "font-medium text-gray-900 hover:underline dark:text-gray-100" %>
+            <% end %>
+          </div>
+        </div>
+        <span class="shrink-0 text-xs text-gray-400 dark:text-gray-500"><%= time_ago_in_words(notification.created_at) %> ago</span>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <%= render EmptyStateComponent.new(
+        icon: :document,
+        title: "All caught up",
+        body: "When someone comments, applauds, saves a story, or follows you, it will show up here."
+      ) %>
+<% end %>
+

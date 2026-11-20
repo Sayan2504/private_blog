@@ -1,0 +1,31 @@
+<%= form_with model: [ post, comment ], class: "space-y-3", data: { controller: "rich-editor" } do |f| %>
+  <% if comment.errors.any? %>
+    <p class="text-sm text-red-600 dark:text-red-400"><%= comment.errors.full_messages.to_sentence %></p>
+  <% end %>
+  <%= f.text_area :body,
+        rows: 3,
+        placeholder: "Share your thoughts... (try :rocket: or pick an emoji)",
+        data: { rich_editor_target: "textarea", action: "input->rich-editor#handleTextareaInput" },
+        class: "w-full rounded-2xl border border-gray-200 bg-white/80 p-3.5 text-sm text-gray-900 placeholder-gray-400 focus:border-gray-400 focus:outline-none dark:border-gray-700 dark:bg-gray-900/80 dark:text-gray-100" %>
+  <div class="relative flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-1">
+      <% %w[👏 🚀 🔥 ❤️ 💡].each do |emoji| %>
+        <button type="button"
+                data-emoji="<%= emoji %>"
+                data-action="rich-editor#insertEmoji"
+                aria-label="Insert <%= emoji %>"
+                class="flex h-7 w-7 items-center justify-center rounded-full text-sm transition hover:scale-110 hover:bg-gray-100 dark:hover:bg-gray-800">
+          <%= emoji %>
+        </button>
+      <% end %>
+      <button type="button"
+              data-action="rich-editor#toggleEmoji"
+              aria-label="More emojis"
+              class="rounded-full border border-gray-200 px-2.5 py-1 text-xs text-gray-600 transition hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+        😀 More
+      </button>
+    </div>
+    <%= f.submit "Post comment", class: "cursor-pointer rounded-full bg-gray-900 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-700 dark:bg-gray-100 dark:text-gray-900 dark:hover:bg-gray-300" %>
+    <div data-rich-editor-target="emojiPopover" class="hidden absolute bottom-full left-0 z-30 mb-2"></div>
+  </div>
+<% end %>

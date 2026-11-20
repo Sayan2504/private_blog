@@ -1,0 +1,7 @@
+<%= turbo_stream.remove dom_id(@post) %>
+<%= turbo_stream.update "flash-messages" do %>
+  <% if flash[:notice].present? %>
+    <%= render FlashComponent.new(type: :notice, message: flash[:notice]) %>
+  <% end %>
+<% end %>
+

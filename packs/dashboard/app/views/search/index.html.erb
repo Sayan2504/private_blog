@@ -1,0 +1,49 @@
+<%= turbo_frame_tag "command_palette_results" do %>
+  <div class="divide-y divide-gray-100 dark:divide-gray-800">
+    <% if @posts.any? %>
+      <div class="p-3">
+        <p class="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-400">Stories</p>
+        <% @posts.each_with_index do |post, idx| %>
+          <%= link_to post_path(post),
+                data: { turbo_frame: "_top", action: "click->command-palette#close" },
+                style: "animation-delay: #{idx * 30}ms",
+                class: "motion-item-in flex items-center justify-between rounded-xl px-3 py-2 text-sm text-gray-800 transition duration-200 ease-soft hover:translate-x-0.5 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800" do %>
+            <span class="truncate font-medium"><%= post.title %></span>
+            <span class="ml-3 shrink-0 text-xs text-gray-400"><%= post.author.presence || post.user&.display_name %></span>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @tags.any? %>
+      <div class="p-3">
+        <p class="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-400">Tags</p>
+        <div class="flex flex-wrap gap-2 px-2 pt-1">
+          <% @tags.each do |tag| %>
+            <%= link_to "##{tag.name}",
+                  published_posts_path(tag: tag.slug),
+                  data: { turbo_frame: "_top", action: "click->command-palette#close" },
+                  class: "rounded-full border border-gray-200 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @authors.any? %>
+      <div class="p-3">
+        <p class="px-2 pb-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-gray-400">Authors</p>
+        <% @authors.each do |author| %>
+          <%= link_to author.display_name,
+                author_path(author),
+                data: { turbo_frame: "_top", action: "click->command-palette#close" },
+                class: "block rounded-xl px-3 py-2 text-sm font-medium text-gray-800 transition hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-800" %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @posts.empty? && @tags.empty? && @authors.empty? %>
+      <p class="p-6 text-center text-sm text-gray-500 dark:text-gray-400">No matches found.</p>
+    <% end %>
+  </div>
+<% end %>
+

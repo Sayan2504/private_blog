@@ -1,0 +1,4 @@
+<%= turbo_stream.replace dom_id(@author, :follow) do %>
+  <%= render "follows/button", author: @author, animate: true %>
+<% end %>
+

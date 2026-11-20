@@ -1,0 +1,4 @@
+<%= turbo_stream.replace dom_id(@post, :bookmark) do %>
+  <%= render "bookmarks/button", post: @post %>
+<% end %>
+

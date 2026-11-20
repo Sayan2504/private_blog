@@ -1,0 +1,46 @@
+<% content_for :title, "Choose a new password — MindCanvas" %>
+
+<%# Step two: reached only through the mailed link, which carries the token in
+    the query string and is stashed in the hidden field below. Losing that
+    field breaks the whole flow, so it stays first inside the form. %>
+
+<div class="flex min-h-full items-center justify-center">
+  <div data-reveal-item data-reveal-frame class="surface-float w-full max-w-md rounded-3xl p-8">
+    <div data-reveal-item data-reveal-wave class="space-y-2 mb-8">
+      <p class="text-sm uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Account recovery</p>
+      <h1 class="text-3xl font-semibold tracking-tight text-gray-900 dark:text-gray-100">Choose a new password</h1>
+      <p class="text-sm text-gray-600 dark:text-gray-300">Pick something you haven't used here before. You'll be signed in as soon as it's saved.</p>
+    </div>
+
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+      <%= render "devise/shared/error_messages", resource: resource %>
+      <%= f.hidden_field :reset_password_token %>
+
+      <div class="space-y-5">
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :password, "New password", class: auth_label_classes %>
+          <% if @minimum_password_length %>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1.5"><%= @minimum_password_length %> characters minimum</p>
+          <% end %>
+          <%= f.password_field :password, autofocus: true, autocomplete: "new-password", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave>
+          <%= f.label :password_confirmation, "Confirm new password", class: auth_label_classes %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: auth_field_classes %>
+        </div>
+
+        <div data-reveal-item data-reveal-wave class="pt-2">
+          <%= f.submit "Save new password", class: auth_submit_classes , data: { turbo_submits_with: "Saving…" } %>
+        </div>
+      </div>
+    <% end %>
+
+    <div data-reveal-item data-reveal-wave class="mt-6 pt-6">
+      <p class="text-center text-sm text-gray-600 dark:text-gray-300">
+        Link expired?
+        <%= link_to "Request a new one", new_password_path(resource_name), class: "font-medium text-gray-900 dark:text-gray-100 hover:underline" %>
+      </p>
+    </div>
+  </div>
+</div>
